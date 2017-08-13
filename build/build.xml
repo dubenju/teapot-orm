@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!-- Build file for applications -->
+<project name="TeapotORM" default="teapot-orm-compile" basedir=".">
+
+  <!-- Build classpath -->
+  <path id="classpath">
+    <fileset dir="../lib">
+      <include name="**/*.jar"/>
+      <exclude name="**/junit-*.jar"/>
+    </fileset>
+  </path>
+
+  <property file="build.properties"/>
+  <property name="build.properties" value="build.properties"/>
+
+  <!-- =================================================================== -->
+  <!-- T E A P O T - O R M - C O M P I L E                                 -->
+  <!-- =================================================================== -->
+  <target name="teapot-orm-compile" description="--> compiles the source code">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| compile the source code for Teapot ORM!  |"/>
+    <echo message="| ant teapot-orm-javadoc to generate apidoc|"/>
+    <echo message="| ant teapot-orm-jar to generate jar file  |"/>
+    <echo message="| ant teapot-orm-javadoc-jar to generate jar file  |"/>
+    <echo message="| ant teapot-orm-source-jar to generate jar file  |"/>
+    <echo message="| ant clean to clean classes folder.       |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <javac srcdir="${src.dir}"
+      destdir="${build.dest}"
+      debug="${debug}"
+      deprecation="${deprecation}"
+      optimize="${optimize}"
+      encoding="UTF-8"
+      includeAntRuntime="false" >
+      <exclude name="com/**"/> 
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- J A V A D O C                                               en_US   -->
+  <!-- =================================================================== -->
+  <target name="teapot-orm-javadoc" depends="teapot-orm-compile">
+        <javadoc destdir="${doc.dir}" windowtitle="Teapot ORM's Document"
+            use="yes" linksource="true" splitindex="yes" encoding="UTF-8"
+            docencoding="UTF-8" charset="UTF-8" locale="zh_CN">
+            <classpath refid="classpath" />
+            <packageset dir="${src.dir}" defaultexcludes="yes">
+            </packageset>
+        </javadoc>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- T E A P O T - O R M - J A V A O D C - J A R                         -->
+  <!-- =================================================================== -->
+  <target name="teapot-orm-javadoc-jar" depends="teapot-orm-javadoc">
+    <jar jarfile="../lib/teapot-orm-0.0.1-javadoc.jar"
+      basedir="${doc.dir}"
+      includes="**"
+    />
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- T E A P O T - O R M - J A R                                         -->
+  <!-- =================================================================== -->
+  <target name="teapot-orm-jar" depends="teapot-orm-compile">
+    <jar jarfile="../lib/teapot-orm-0.0.1.jar"
+      basedir="${build.dest}"
+      includes="**"
+    />
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- T E A P O T - O R M - J A R                                         -->
+  <!-- =================================================================== -->
+  <target name="teapot-orm-source-jar" depends="teapot-orm-compile">
+    <jar jarfile="../lib/teapot-orm-0.0.1-sources.jar"
+      basedir="${src.dir}"
+      includes="**"
+    />
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- C L E A N                                                           -->
+  <!-- =================================================================== -->
+  <target name="clean" description="--> cleans up the classes directory">
+    <delete dir="${build.dest}"/>
+    <delete dir="${doc.dir}"/>
+
+    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${doc.dir}"/>
+  </target>
+</project>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- 虚拟表定义 -->
+<database name="default">
+
+  <table name="TABLE">
+   <column name="TABLE_CAT" type="VARCHAR"/>
+   <column name="TABLE_SCHEM" type="VARCHAR"/>
+   <column name="TABLE_NAME" type="VARCHAR"/>
+   <column name="TABLE_TYPE" type="VARCHAR"/>
+   <column name="REMARKS" type="VARCHAR"/>
+   <column name="TYPE_CAT" type="VARCHAR"/>
+   <column name="TYPE_SCHEM" type="VARCHAR"/>
+   <column name="TYPE_NAME" type="VARCHAR"/>
+   <column name="SELF_REFERENCING_COL_NAME" type="VARCHAR"/>
+   <column name="REF_GENERATION" type="VARCHAR"/>
+   <column name="COLMUNS" type="java.util.ArrayList&lt;MdlColumn&gt;"/>
+   <column name="PRIMARY_KEYS" type="java.util.ArrayList&lt;MdlPrimaryKey&gt;"/>
+   <column name="INDEXS" type="java.util.ArrayList&lt;MdlIndex&gt;"/>
+  </table>
+  <table name="COLUMN">
+   <column name="TABLE_CAT" type="VARCHAR"/>
+   <column name="TABLE_SCHEM" type="VARCHAR"/>
+   <column name="TABLE_NAME" type="VARCHAR"/>
+   <column name="COLUMN_NAME" type="VARCHAR"/>
+   <column name="DATA_TYPE" type="VARCHAR"/>
+   <column name="TYPE_NAME" type="VARCHAR"/>
+   <column name="TYPE_NAME_JAVA" type="VARCHAR"/>
+   <column name="COLUMN_SIZE" type="VARCHAR"/>
+   <column name="BUFFER_LENGTH" type="VARCHAR"/>
+   <column name="DECIMAL_DIGITS" type="VARCHAR"/>
+   <column name="NUM_PREC_RADIX" type="VARCHAR"/>
+   <column name="NULLABLE" type="VARCHAR"/>
+   <column name="REMARKS" type="VARCHAR"/>
+   <column name="COLUMN_DEF" type="VARCHAR"/>
+   <column name="SQL_DATA_TYPE" type="VARCHAR"/>
+   <column name="SQL_DATETIME_SUB" type="VARCHAR"/>
+   <column name="CHAR_OCTET_LENGTH" type="VARCHAR"/>
+   <column name="ORDINAL_POSITION" type="VARCHAR"/>
+   <column name="IS_NULLABLE" type="VARCHAR"/>
+   <column name="SCOPE_CATALOG" type="VARCHAR"/>
+   <column name="SCOPE_SCHEMA" type="VARCHAR"/>
+   <column name="SCOPE_TABLE" type="VARCHAR"/>
+   <column name="SOURCE_DATA_TYPE" type="VARCHAR"/>
+   <column name="IS_AUTOINCREMENT" type="VARCHAR"/>
+   <column name="IS_GENERATEDCOLUMN" type="VARCHAR"/>
+  </table>
+  <table name="PRIMARY_KEY">
+   <column name="TABLE_CAT" type="VARCHAR"/>
+   <column name="TABLE_SCHEM" type="VARCHAR"/>
+   <column name="TABLE_NAME" type="VARCHAR"/>
+   <column name="COLUMN_NAME" type="VARCHAR"/>
+   <column name="KEY_SEQ" type="VARCHAR"/>
+   <column name="PK_NAME" type="VARCHAR"/>
+  </table>
+  <table name="INDEX">
+   <column name="TABLE_CAT" type="VARCHAR"/>
+   <column name="TABLE_SCHEM" type="VARCHAR"/>
+   <column name="TABLE_NAME" type="VARCHAR"/>
+   <column name="NON_UNIQUE" type="VARCHAR"/>
+   <column name="INDEX_QUALIFIER" type="VARCHAR"/>
+   <column name="INDEX_NAME" type="VARCHAR"/>
+   <column name="TYPE" type="VARCHAR"/>
+   <column name="ORDINAL_POSITION" type="VARCHAR"/>
+   <column name="COLUMN_NAME" type="VARCHAR"/>
+   <column name="ASC_OR_DESC" type="VARCHAR"/>
+   <column name="CARDINALITY" type="VARCHAR"/>
+   <column name="PAGES" type="VARCHAR"/>
+   <column name="FILTER_CONDITION" type="VARCHAR"/>
+  </table>
+</database>
