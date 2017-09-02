@@ -19,16 +19,17 @@ public class TeapotDbTest {
     Assert.assertSame(TeapotDb.getInstance(), TeapotDb.getInstance());
   }
 
-  @Test
-  public void testInit() {
-    TeapotDb.getInstance().init();
-  }
+//  @Test
+//  public void testInit() {
+//    TeapotDb.getInstance().init();
+//  }
 
   @Test
   public void testGetConnection() {
-    Connection dbConn = TeapotDb.getInstance().getConnection();
-    Assert.assertNotNull(dbConn);
     try {
+      Connection dbConn = TeapotDb.getInstance().getConnection();
+      Assert.assertNotNull(dbConn);
+
       Assert.assertFalse(dbConn.isClosed());
       TeapotDb.getInstance().releaseConnection(dbConn);
     } catch (SQLException e) {
@@ -38,8 +39,9 @@ public class TeapotDbTest {
 
   @Test
   public void testReleaseConnection() {
-    Connection dbConn = TeapotDb.getInstance().getConnection();
     try {
+      Connection dbConn = TeapotDb.getInstance().getConnection();
+
       TeapotDb.getInstance().releaseConnection(dbConn);
       Assert.assertTrue(dbConn.isClosed());
     } catch (SQLException e) {
@@ -49,7 +51,8 @@ public class TeapotDbTest {
 
   @Test
   public void testGetDbType() {
-    TeapotDb.getInstance().init();
+//    TeapotDb.getInstance().init();
+    TeapotDb.getInstance();
     Assert.assertEquals("sqlite", TeapotDb.getInstance().getDbType());
   }
 

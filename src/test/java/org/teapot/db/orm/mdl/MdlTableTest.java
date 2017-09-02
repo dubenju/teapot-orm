@@ -975,7 +975,7 @@ public class MdlTableTest {
    * 通过键名获取值的测试方法.
    */
   @Test
-  public void testGetValueByKey() {
+  public void testGet() {
     MdlTable mdl = new MdlTable();
     java.lang.String tableCat = new java.lang.String("tableCat");
     mdl.setTableCat(tableCat);
@@ -1005,92 +1005,92 @@ public class MdlTableTest {
     mdl.setIndexs(indexs);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey(MdlTable.TABLE_CAT));
+        mdl.get(MdlTable.TABLE_CAT));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey(MdlTable.TABLE_SCHEM));
+        mdl.get(MdlTable.TABLE_SCHEM));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey(MdlTable.TABLE_NAME));
+        mdl.get(MdlTable.TABLE_NAME));
     Assert.assertEquals(mdl.getTableType(),
-        mdl.getValueByKey(MdlTable.TABLE_TYPE));
+        mdl.get(MdlTable.TABLE_TYPE));
     Assert.assertEquals(mdl.getRemarks(),
-        mdl.getValueByKey(MdlTable.REMARKS));
+        mdl.get(MdlTable.REMARKS));
     Assert.assertEquals(mdl.getTypeCat(),
-        mdl.getValueByKey(MdlTable.TYPE_CAT));
+        mdl.get(MdlTable.TYPE_CAT));
     Assert.assertEquals(mdl.getTypeSchem(),
-        mdl.getValueByKey(MdlTable.TYPE_SCHEM));
+        mdl.get(MdlTable.TYPE_SCHEM));
     Assert.assertEquals(mdl.getTypeName(),
-        mdl.getValueByKey(MdlTable.TYPE_NAME));
+        mdl.get(MdlTable.TYPE_NAME));
     Assert.assertEquals(mdl.getSelfReferencingColName(),
-        mdl.getValueByKey(MdlTable.SELF_REFERENCING_COL_NAME));
+        mdl.get(MdlTable.SELF_REFERENCING_COL_NAME));
     Assert.assertEquals(mdl.getRefGeneration(),
-        mdl.getValueByKey(MdlTable.REF_GENERATION));
+        mdl.get(MdlTable.REF_GENERATION));
     Assert.assertEquals(mdl.getColmuns(),
-        mdl.getValueByKey(MdlTable.COLMUNS));
+        mdl.get(MdlTable.COLMUNS));
     Assert.assertEquals(mdl.getPrimaryKeys(),
-        mdl.getValueByKey(MdlTable.PRIMARY_KEYS));
+        mdl.get(MdlTable.PRIMARY_KEYS));
     Assert.assertEquals(mdl.getIndexs(),
-        mdl.getValueByKey(MdlTable.INDEXS));
+        mdl.get(MdlTable.INDEXS));
 
   }
   /**
    * 通过键名设置值的测试方法.
    */
   @Test
-  public void testSetValueByKey() {
+  public void testSet() {
     MdlTable mdl = new MdlTable();
     java.lang.String tableCat = new java.lang.String("tableCat");
-    mdl.setValueByKey(MdlTable.TABLE_CAT, tableCat);
+    mdl.set(MdlTable.TABLE_CAT, tableCat);
     java.lang.String tableSchem = new java.lang.String("tableSchem");
-    mdl.setValueByKey(MdlTable.TABLE_SCHEM, tableSchem);
+    mdl.set(MdlTable.TABLE_SCHEM, tableSchem);
     java.lang.String tableName = new java.lang.String("tableName");
-    mdl.setValueByKey(MdlTable.TABLE_NAME, tableName);
+    mdl.set(MdlTable.TABLE_NAME, tableName);
     java.lang.String tableType = new java.lang.String("tableType");
-    mdl.setValueByKey(MdlTable.TABLE_TYPE, tableType);
+    mdl.set(MdlTable.TABLE_TYPE, tableType);
     java.lang.String remarks = new java.lang.String("remarks");
-    mdl.setValueByKey(MdlTable.REMARKS, remarks);
+    mdl.set(MdlTable.REMARKS, remarks);
     java.lang.String typeCat = new java.lang.String("typeCat");
-    mdl.setValueByKey(MdlTable.TYPE_CAT, typeCat);
+    mdl.set(MdlTable.TYPE_CAT, typeCat);
     java.lang.String typeSchem = new java.lang.String("typeSchem");
-    mdl.setValueByKey(MdlTable.TYPE_SCHEM, typeSchem);
+    mdl.set(MdlTable.TYPE_SCHEM, typeSchem);
     java.lang.String typeName = new java.lang.String("typeName");
-    mdl.setValueByKey(MdlTable.TYPE_NAME, typeName);
+    mdl.set(MdlTable.TYPE_NAME, typeName);
     java.lang.String selfReferencingColName = new java.lang.String("selfReferencingColName");
-    mdl.setValueByKey(MdlTable.SELF_REFERENCING_COL_NAME, selfReferencingColName);
+    mdl.set(MdlTable.SELF_REFERENCING_COL_NAME, selfReferencingColName);
     java.lang.String refGeneration = new java.lang.String("refGeneration");
-    mdl.setValueByKey(MdlTable.REF_GENERATION, refGeneration);
+    mdl.set(MdlTable.REF_GENERATION, refGeneration);
     java.util.ArrayList<MdlColumn> colmuns = new java.util.ArrayList<MdlColumn>();
-    mdl.setValueByKey(MdlTable.COLMUNS, colmuns);
+    mdl.set(MdlTable.COLMUNS, colmuns);
     java.util.ArrayList<MdlPrimaryKey> primaryKeys = new java.util.ArrayList<MdlPrimaryKey>();
-    mdl.setValueByKey(MdlTable.PRIMARY_KEYS, primaryKeys);
+    mdl.set(MdlTable.PRIMARY_KEYS, primaryKeys);
     java.util.ArrayList<MdlIndex> indexs = new java.util.ArrayList<MdlIndex>();
-    mdl.setValueByKey(MdlTable.INDEXS, indexs);
+    mdl.set(MdlTable.INDEXS, indexs);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey( MdlTable.TABLE_CAT ));
+        mdl.get( MdlTable.TABLE_CAT ));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey( MdlTable.TABLE_SCHEM ));
+        mdl.get( MdlTable.TABLE_SCHEM ));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey( MdlTable.TABLE_NAME ));
+        mdl.get( MdlTable.TABLE_NAME ));
     Assert.assertEquals(mdl.getTableType(),
-        mdl.getValueByKey( MdlTable.TABLE_TYPE ));
+        mdl.get( MdlTable.TABLE_TYPE ));
     Assert.assertEquals(mdl.getRemarks(),
-        mdl.getValueByKey( MdlTable.REMARKS ));
+        mdl.get( MdlTable.REMARKS ));
     Assert.assertEquals(mdl.getTypeCat(),
-        mdl.getValueByKey( MdlTable.TYPE_CAT ));
+        mdl.get( MdlTable.TYPE_CAT ));
     Assert.assertEquals(mdl.getTypeSchem(),
-        mdl.getValueByKey( MdlTable.TYPE_SCHEM ));
+        mdl.get( MdlTable.TYPE_SCHEM ));
     Assert.assertEquals(mdl.getTypeName(),
-        mdl.getValueByKey( MdlTable.TYPE_NAME ));
+        mdl.get( MdlTable.TYPE_NAME ));
     Assert.assertEquals(mdl.getSelfReferencingColName(),
-        mdl.getValueByKey( MdlTable.SELF_REFERENCING_COL_NAME ));
+        mdl.get( MdlTable.SELF_REFERENCING_COL_NAME ));
     Assert.assertEquals(mdl.getRefGeneration(),
-        mdl.getValueByKey( MdlTable.REF_GENERATION ));
+        mdl.get( MdlTable.REF_GENERATION ));
     Assert.assertEquals(mdl.getColmuns(),
-        mdl.getValueByKey( MdlTable.COLMUNS ));
+        mdl.get( MdlTable.COLMUNS ));
     Assert.assertEquals(mdl.getPrimaryKeys(),
-        mdl.getValueByKey( MdlTable.PRIMARY_KEYS ));
+        mdl.get( MdlTable.PRIMARY_KEYS ));
     Assert.assertEquals(mdl.getIndexs(),
-        mdl.getValueByKey( MdlTable.INDEXS ));
+        mdl.get( MdlTable.INDEXS ));
 
   }
 

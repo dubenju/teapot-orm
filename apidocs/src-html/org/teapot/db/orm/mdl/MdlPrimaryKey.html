@@ -212,7 +212,7 @@
 <span class="sourceLineNo">204</span>   * @return Object 对应键名值。<a name="line.204"></a>
 <span class="sourceLineNo">205</span>   */<a name="line.205"></a>
 <span class="sourceLineNo">206</span>  @Override<a name="line.206"></a>
-<span class="sourceLineNo">207</span>  public Object getValueByKey(String key) {<a name="line.207"></a>
+<span class="sourceLineNo">207</span>  public Object get(String key) {<a name="line.207"></a>
 <span class="sourceLineNo">208</span>    Object ret = null;<a name="line.208"></a>
 <span class="sourceLineNo">209</span>    if (MdlPrimaryKey.TABLE_CAT.equals(key)) {<a name="line.209"></a>
 <span class="sourceLineNo">210</span>      ret = this.getTableCat();<a name="line.210"></a>
@@ -242,7 +242,7 @@
 <span class="sourceLineNo">234</span>   * @param value 对应键名值。<a name="line.234"></a>
 <span class="sourceLineNo">235</span>   */<a name="line.235"></a>
 <span class="sourceLineNo">236</span>  @Override<a name="line.236"></a>
-<span class="sourceLineNo">237</span>  public void setValueByKey(String key, Object value) {<a name="line.237"></a>
+<span class="sourceLineNo">237</span>  public IKeyValue set(String key, Object value) {<a name="line.237"></a>
 <span class="sourceLineNo">238</span>    if (MdlPrimaryKey.TABLE_CAT.equals(key)) {<a name="line.238"></a>
 <span class="sourceLineNo">239</span>      this.setTableCat((java.lang.String) value);<a name="line.239"></a>
 <span class="sourceLineNo">240</span>    }<a name="line.240"></a>
@@ -261,8 +261,9 @@
 <span class="sourceLineNo">253</span>    if (MdlPrimaryKey.PK_NAME.equals(key)) {<a name="line.253"></a>
 <span class="sourceLineNo">254</span>      this.setPkName((java.lang.String) value);<a name="line.254"></a>
 <span class="sourceLineNo">255</span>    }<a name="line.255"></a>
-<span class="sourceLineNo">256</span>  }<a name="line.256"></a>
-<span class="sourceLineNo">257</span>}<a name="line.257"></a>
+<span class="sourceLineNo">256</span>    return this;<a name="line.256"></a>
+<span class="sourceLineNo">257</span>  }<a name="line.257"></a>
+<span class="sourceLineNo">258</span>}<a name="line.258"></a>
 
 
 

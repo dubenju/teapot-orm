@@ -16,6 +16,7 @@
 
 package $!{pkg};
 
+import org.teapot.db.orm.Formatter;
 import org.teapot.db.orm.IKeyValue;
 
 import java.io.Serializable;
@@ -25,7 +26,8 @@ import java.io.Serializable;
  * @author dubenju@126.com
  *     这份代码最初是由TeapotOrmGen于$!{genDtTm}自动生成的。
  */
-public class Mdl$!fmtter.fmtFun("$!{table.TableName}") implements Serializable, IKeyValue {
+public class Mdl$!fmtter.fmtFun("$!{table.TableName}")
+    implements Serializable, IKeyValue, Comparable<Mdl$!fmtter.fmtFun("$!{table.TableName}")> {
 
   private static final long serialVersionUID = 1L;
   /*
@@ -41,7 +43,7 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}") implements Serializable, 
   /** 所有字段名数组. */
   public static final String[] COLUMNS = {
 #foreach($col in $!{table.Colmuns})
-    Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}#if(${velocityCount} < $!table.getColmuns().size()),#end
+    Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}#if($foreach.count < $!table.getColmuns().size()),#end
 
 #end
   };
@@ -49,7 +51,7 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}") implements Serializable, 
   /** 所有主键字段名数组. */
   public static final String[] PRIKEYS = {
 #foreach($pk in $!{table.PrimaryKeys})
-    Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{pk.ColumnName}#if(${velocityCount} < $!table.getPrimaryKeys().size()),#end
+    Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{pk.ColumnName}#if($foreach.count < $!table.getPrimaryKeys().size()),#end
 
 #end
   };
@@ -108,22 +110,30 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}") implements Serializable, 
     StringBuffer buf = new StringBuffer();
 #foreach($col in $!{table.Colmuns})
     buf.append(this.get$!fmtter.fmtFun("$!{col.ColumnName}")());
-#if(${velocityCount} < $!table.getColmuns().size())    buf.append(",");#end
+#if($foreach.count < $!table.getColmuns().size())    buf.append(",");#end
 
 #end
+    buf.append(",");
+    buf.append(this.getClass().getName());
     return buf.toString();
   }
 
   /**
    * 通过键名获取值.
+   *
+   * <p>
+   * 注意：对于参数名称要使用常量.
    * 当指定的键名不存在的时候，返回null。
    * @return Object 对应键名值。
    */
   @Override
-  public Object getValueByKey(String key) {
+  public Object get(String key) {
     Object ret = null;
 #foreach($col in $!{table.Colmuns})
     if (Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}.equals(key)) {
+      ret = this.get$!fmtter.fmtFun("$!{col.ColumnName}")();
+    }
+    if (Formatter.INSTANCE.fmtFun(Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}).equals(key)) {
       ret = this.get$!fmtter.fmtFun("$!{col.ColumnName}")();
     }
 #end
@@ -132,6 +142,9 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}") implements Serializable, 
 
   /**
    * 通过键名设置值.
+   *
+   * <p>
+   * 注意：对于参数名称要使用常量.
    * 当指定的键名不存在的时候，不作任何改动。
    * @param key 键名。
    * @param value 对应键名值。
@@ -143,11 +156,67 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}") implements Serializable, 
 #end
 #end
   @Override
-  public void setValueByKey(String key, Object value) {
+  public IKeyValue set(String key, Object value) {
 #foreach($col in $!{table.Colmuns})
     if (Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}.equals(key)) {
       this.set$!fmtter.fmtFun("$!{col.ColumnName}")(($!{col.TypeNameJava}) value);
     }
 #end
+    return this;
+  }
+
+  /**
+   * 比较两个对象是否相等.
+   * @param   anObject   the reference object with which to compare.
+   * @return  {@code true} if this object is the same as the obj
+   *          argument; {@code false} otherwise.
+   */
+  @Override
+  public boolean equals(Object anObject) {
+    if (this == anObject) {
+      return true;
+    }
+    if (anObject instanceof Mdl$!fmtter.fmtFun("$!{table.TableName}")) {
+      return this.compareTo((Mdl$!fmtter.fmtFun("$!{table.TableName}")) anObject) == 0;
+    }
+    return super.equals(anObject);
+  }
+
+  /**
+   * 比较大小.
+   * @param anotherMdl$!fmtter.fmtFun("$!{table.TableName}")   the {@code Mdl$!fmtter.fmtFun("$!{table.TableName}")} to be compared.
+   * @return  the value {@code 0} if the argument Mdl$!fmtter.fmtFun("$!{table.TableName}") is equal to
+   *          this Mdl$!fmtter.fmtFun("$!{table.TableName}"); a value less than {@code 0} if this Mdl$!fmtter.fmtFun("$!{table.TableName}")
+   *          is lexicographically less than the Mdl$!fmtter.fmtFun("$!{table.TableName}") argument; and a
+   *          value greater than {@code 0} if this Mdl$!fmtter.fmtFun("$!{table.TableName}") is
+   *          lexicographically greater than the Mdl$!fmtter.fmtFun("$!{table.TableName}") argument.
+   */
+  @Override
+  public int compareTo(Mdl$!fmtter.fmtFun("$!{table.TableName}") anotherMdl$!fmtter.fmtFun("$!{table.TableName}")) {
+    int result = 0;
+    if (anotherMdl$!fmtter.fmtFun("$!{table.TableName}") == null) {
+      result = 1;
+      return result;
+    }
+#foreach($pk in $!{table.PrimaryKeys})
+    if (this.get$!fmtter.fmtFun($!{pk.ColumnName})() == null) {
+      if (anotherMdl$!{fmtter.fmtFun("$!{table.TableName}")}.get$!fmtter.fmtFun($!{pk.ColumnName})() != null) {
+        result = -1;
+        return result;
+      }
+    }
+    if (this.get$!fmtter.fmtFun($!{pk.ColumnName})() != null) {
+      if (anotherMdl$!{fmtter.fmtFun("$!{table.TableName}")}.get$!fmtter.fmtFun($!{pk.ColumnName})() == null) {
+        result = 1;
+        return result;
+      }
+    }
+    result = this.get$!fmtter.fmtFun($!{pk.ColumnName})().compareTo(anotherMdl$!{fmtter.fmtFun("$!{table.TableName}")}.get$!fmtter.fmtFun($!{pk.ColumnName})());
+    if (result != 0) {
+      return result;
+    }
+#end
+
+    return result;
   }
 }

@@ -119,7 +119,7 @@ public class TeapotOrmTest3 {
     List<MdlTblSqlite> dataUpdate = new ArrayList<MdlTblSqlite>();
     dataUpdate.add(testc);
     Condition conditionUpdate = new Condition();
-    conditionUpdate.addWhere(MdlTblSqlite.TEST_ID, Condition.EQUAL, "997");
+    conditionUpdate.where(MdlTblSqlite.TEST_ID, Condition.EQUAL, "997");
     /* Update */
     cnt = TeapotOrm.INSTANCE.update(MdlTblSqlite.TBL_SQLITE, conditionUpdate,
         dataUpdate);
@@ -133,7 +133,7 @@ public class TeapotOrmTest3 {
 
     /* Delete */
     Condition conditionDel = new Condition();
-    conditionDel.addWhere(MdlTblSqlite.TEST_ID, Condition.EQUAL, "998");
+    conditionDel.where(MdlTblSqlite.TEST_ID, Condition.EQUAL, "998");
     cnt = TeapotOrm.INSTANCE.delete(MdlTblSqlite.TBL_SQLITE, conditionDel);
     System.out.println("Deleted count=" + cnt);
     list = TeapotOrm.INSTANCE.select(MdlTblSqlite.TBL_SQLITE,
@@ -239,7 +239,7 @@ public class TeapotOrmTest3 {
       List<MdlTblSqlite> dataUpdate = new ArrayList<MdlTblSqlite>();
       dataUpdate.add(testc);
       Condition conditionUpdate = new Condition();
-      conditionUpdate.addWhere(MdlTblSqlite.TEST_ID, Condition.EQUAL, "997");
+      conditionUpdate.where(MdlTblSqlite.TEST_ID, Condition.EQUAL, "997");
       /* Update */
       cnt = TeapotOrm.INSTANCE.update(MdlTblSqlite.TBL_SQLITE, conditionUpdate,
           dataUpdate, conn);
@@ -254,7 +254,7 @@ public class TeapotOrmTest3 {
 
       /* Delete */
       Condition conditionDel = new Condition();
-      conditionDel.addWhere(MdlTblSqlite.TEST_ID, Condition.EQUAL, "996");
+      conditionDel.where(MdlTblSqlite.TEST_ID, Condition.EQUAL, "996");
       cnt = TeapotOrm.INSTANCE.delete(MdlTblSqlite.TBL_SQLITE, conditionDel,
           conn);
       System.out.println("Deleted count=" + cnt);

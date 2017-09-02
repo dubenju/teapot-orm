@@ -2,4 +2,7 @@ org.teapot.db
 org.teapot.db.orm
 org.teapot.db.orm.mdl
 org.teapot.db.orm.util
+org.teapot.db.orm.util.keybreak
+org.teapot.db.orm.util.keybreakmany
+org.teapot.db.orm.util.keymatch
 org.teapot.db.orm.util.sort

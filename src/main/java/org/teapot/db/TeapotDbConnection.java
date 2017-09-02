@@ -36,9 +36,10 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * 数据库连接类。
+ * 数据库连接类.
  *
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public class TeapotDbConnection implements Connection {
   private Connection conection;
@@ -83,7 +84,11 @@ public class TeapotDbConnection implements Connection {
 
   @Override
   public PreparedStatement prepareStatement(String sql) throws SQLException {
-    return this.conection.prepareStatement(sql);
+    long time3 = System.currentTimeMillis();
+    PreparedStatement result =  this.conection.prepareStatement(sql);
+    long time4 = System.currentTimeMillis();
+    System.out.println("☆☆☆☆☆PreparedStatement耗时：" + (time4 - time3) + "毫秒");
+    return result;
   }
 
   @Override

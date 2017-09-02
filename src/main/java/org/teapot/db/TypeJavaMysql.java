@@ -19,16 +19,19 @@ package org.teapot.db;
 /**
  * 从SQL到Java数据类型映射的Mysql个别指定类。
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public class TypeJavaMysql extends TypeJavaDb {
   /**
    * 构造函数.
+   * @since 0.0.1
    */
   protected TypeJavaMysql() {
   }
 
   /**
    * 设置从SQL到Java数据类型的Mysql个别映射.
+   * @since 0.0.1
    */
   @Override
   protected void setup() {
@@ -41,6 +44,8 @@ public class TypeJavaMysql extends TypeJavaDb {
     setType("VARCHAR", "java.lang.String");
 
     setType("BLOB", "byte[]");
+    /* @since 0.0.2 */
+    setType("LONGBLOB", "byte[]");
 
     setType("DOUBLE", "java.lang.Double");
     setType("FLOAT", "java.lang.Float");

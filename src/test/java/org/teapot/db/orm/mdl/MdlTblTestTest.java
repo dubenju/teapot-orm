@@ -29,7 +29,7 @@ import java.util.HashMap;
 /**
  * 表tbl_test的JavaBean类的JUnit测试类.
  * @author dubenju@126.com
- *     这份代码最初是由TeapotOrmGen于2017/08/13 13:22:06.417 +0900自动生成的。
+ *     这份代码最初是由TeapotOrmGen于2017/08/31 07:28:23.214 +0900自动生成的。
  */
 public class MdlTblTestTest {
 
@@ -1512,7 +1512,7 @@ public class MdlTblTestTest {
    * 通过键名获取值的测试方法.
    */
   @Test
-  public void testGetValueByKey() {
+  public void testGet() {
     MdlTblTest mdl = new MdlTblTest();
     java.lang.String testId = new java.lang.String("testId");
     mdl.setTestId(testId);
@@ -1557,127 +1557,127 @@ public class MdlTblTestTest {
     mdl.setUpdateScreenId(updateScreenId);
 
     Assert.assertEquals(mdl.getTestId(),
-        mdl.getValueByKey(MdlTblTest.TEST_ID));
+        mdl.get(MdlTblTest.TEST_ID));
     Assert.assertEquals(mdl.getTestName(),
-        mdl.getValueByKey(MdlTblTest.TEST_NAME));
+        mdl.get(MdlTblTest.TEST_NAME));
     Assert.assertEquals(mdl.getTestBit(),
-        mdl.getValueByKey(MdlTblTest.TEST_BIT));
+        mdl.get(MdlTblTest.TEST_BIT));
     Assert.assertEquals(mdl.getTestBlob(),
-        mdl.getValueByKey(MdlTblTest.TEST_BLOB));
+        mdl.get(MdlTblTest.TEST_BLOB));
     Assert.assertEquals(mdl.getTestDouble(),
-        mdl.getValueByKey(MdlTblTest.TEST_DOUBLE));
+        mdl.get(MdlTblTest.TEST_DOUBLE));
     Assert.assertEquals(mdl.getTestFloat(),
-        mdl.getValueByKey(MdlTblTest.TEST_FLOAT));
+        mdl.get(MdlTblTest.TEST_FLOAT));
     Assert.assertEquals(mdl.getTestTinyint(),
-        mdl.getValueByKey(MdlTblTest.TEST_TINYINT));
+        mdl.get(MdlTblTest.TEST_TINYINT));
     Assert.assertEquals(mdl.getTestInt(),
-        mdl.getValueByKey(MdlTblTest.TEST_INT));
+        mdl.get(MdlTblTest.TEST_INT));
     Assert.assertEquals(mdl.getTestDecimal(),
-        mdl.getValueByKey(MdlTblTest.TEST_DECIMAL));
+        mdl.get(MdlTblTest.TEST_DECIMAL));
     Assert.assertEquals(mdl.getTestBigint(),
-        mdl.getValueByKey(MdlTblTest.TEST_BIGINT));
+        mdl.get(MdlTblTest.TEST_BIGINT));
     Assert.assertEquals(mdl.getTestDatetime(),
-        mdl.getValueByKey(MdlTblTest.TEST_DATETIME));
+        mdl.get(MdlTblTest.TEST_DATETIME));
     Assert.assertEquals(mdl.getTestOrder(),
-        mdl.getValueByKey(MdlTblTest.TEST_ORDER));
+        mdl.get(MdlTblTest.TEST_ORDER));
     Assert.assertEquals(mdl.getCreateDate(),
-        mdl.getValueByKey(MdlTblTest.CREATE_DATE));
+        mdl.get(MdlTblTest.CREATE_DATE));
     Assert.assertEquals(mdl.getCreateTime(),
-        mdl.getValueByKey(MdlTblTest.CREATE_TIME));
+        mdl.get(MdlTblTest.CREATE_TIME));
     Assert.assertEquals(mdl.getUpdateDate(),
-        mdl.getValueByKey(MdlTblTest.UPDATE_DATE));
+        mdl.get(MdlTblTest.UPDATE_DATE));
     Assert.assertEquals(mdl.getUpdateTime(),
-        mdl.getValueByKey(MdlTblTest.UPDATE_TIME));
+        mdl.get(MdlTblTest.UPDATE_TIME));
     Assert.assertEquals(mdl.getUpdateUserId(),
-        mdl.getValueByKey(MdlTblTest.UPDATE_USER_ID));
+        mdl.get(MdlTblTest.UPDATE_USER_ID));
     Assert.assertEquals(mdl.getUpdateScreenId(),
-        mdl.getValueByKey(MdlTblTest.UPDATE_SCREEN_ID));
+        mdl.get(MdlTblTest.UPDATE_SCREEN_ID));
 
   }
   /**
    * 通过键名设置值的测试方法.
    */
   @Test
-  public void testSetValueByKey() {
+  public void testSet() {
     MdlTblTest mdl = new MdlTblTest();
     java.lang.String testId = new java.lang.String("testId");
-    mdl.setValueByKey(MdlTblTest.TEST_ID, testId);
+    mdl.set(MdlTblTest.TEST_ID, testId);
     java.lang.String testName = new java.lang.String("testName");
-    mdl.setValueByKey(MdlTblTest.TEST_NAME, testName);
+    mdl.set(MdlTblTest.TEST_NAME, testName);
     java.lang.Boolean testBit = true;
-    mdl.setValueByKey(MdlTblTest.TEST_BIT, testBit);
+    mdl.set(MdlTblTest.TEST_BIT, testBit);
     byte[] testBlob = new byte[] {0x32};
-    mdl.setValueByKey(MdlTblTest.TEST_BLOB, testBlob);
+    mdl.set(MdlTblTest.TEST_BLOB, testBlob);
     java.lang.Double testDouble = 12346.679d;
-    mdl.setValueByKey(MdlTblTest.TEST_DOUBLE, testDouble);
+    mdl.set(MdlTblTest.TEST_DOUBLE, testDouble);
     java.lang.Float testFloat = 12355.668f;
-    mdl.setValueByKey(MdlTblTest.TEST_FLOAT, testFloat);
+    mdl.set(MdlTblTest.TEST_FLOAT, testFloat);
     java.lang.Integer testTinyint = 54421;
-    mdl.setValueByKey(MdlTblTest.TEST_TINYINT, testTinyint);
+    mdl.set(MdlTblTest.TEST_TINYINT, testTinyint);
     java.lang.Long testInt = 654221L;
-    mdl.setValueByKey(MdlTblTest.TEST_INT, testInt);
+    mdl.set(MdlTblTest.TEST_INT, testInt);
     java.math.BigDecimal testDecimal = new java.math.BigDecimal("2017.10111");
-    mdl.setValueByKey(MdlTblTest.TEST_DECIMAL, testDecimal);
+    mdl.set(MdlTblTest.TEST_DECIMAL, testDecimal);
     java.lang.Long testBigint = 654221L;
-    mdl.setValueByKey(MdlTblTest.TEST_BIGINT, testBigint);
+    mdl.set(MdlTblTest.TEST_BIGINT, testBigint);
     long testDatetimeCurTime = System.currentTimeMillis();
     java.sql.Timestamp testDatetime = new java.sql.Timestamp(testDatetimeCurTime);
-    mdl.setValueByKey(MdlTblTest.TEST_DATETIME, testDatetime);
+    mdl.set(MdlTblTest.TEST_DATETIME, testDatetime);
     java.lang.String testOrder = new java.lang.String("testOrder");
-    mdl.setValueByKey(MdlTblTest.TEST_ORDER, testOrder);
+    mdl.set(MdlTblTest.TEST_ORDER, testOrder);
     long createDateCurTime = System.currentTimeMillis();
     java.sql.Date createDate = new java.sql.Date(createDateCurTime);
-    mdl.setValueByKey(MdlTblTest.CREATE_DATE, createDate);
+    mdl.set(MdlTblTest.CREATE_DATE, createDate);
     long createTimeCurTime = System.currentTimeMillis();
     java.sql.Time createTime = new java.sql.Time(createTimeCurTime);
-    mdl.setValueByKey(MdlTblTest.CREATE_TIME, createTime);
+    mdl.set(MdlTblTest.CREATE_TIME, createTime);
     long updateDateCurTime = System.currentTimeMillis();
     java.sql.Date updateDate = new java.sql.Date(updateDateCurTime);
-    mdl.setValueByKey(MdlTblTest.UPDATE_DATE, updateDate);
+    mdl.set(MdlTblTest.UPDATE_DATE, updateDate);
     long updateTimeCurTime = System.currentTimeMillis();
     java.sql.Time updateTime = new java.sql.Time(updateTimeCurTime);
-    mdl.setValueByKey(MdlTblTest.UPDATE_TIME, updateTime);
+    mdl.set(MdlTblTest.UPDATE_TIME, updateTime);
     java.lang.String updateUserId = new java.lang.String("updateUserId");
-    mdl.setValueByKey(MdlTblTest.UPDATE_USER_ID, updateUserId);
+    mdl.set(MdlTblTest.UPDATE_USER_ID, updateUserId);
     java.lang.String updateScreenId = new java.lang.String("updateScreenId");
-    mdl.setValueByKey(MdlTblTest.UPDATE_SCREEN_ID, updateScreenId);
+    mdl.set(MdlTblTest.UPDATE_SCREEN_ID, updateScreenId);
 
     Assert.assertEquals(mdl.getTestId(),
-        mdl.getValueByKey( MdlTblTest.TEST_ID ));
+        mdl.get( MdlTblTest.TEST_ID ));
     Assert.assertEquals(mdl.getTestName(),
-        mdl.getValueByKey( MdlTblTest.TEST_NAME ));
+        mdl.get( MdlTblTest.TEST_NAME ));
     Assert.assertEquals(mdl.getTestBit(),
-        mdl.getValueByKey( MdlTblTest.TEST_BIT ));
+        mdl.get( MdlTblTest.TEST_BIT ));
     Assert.assertEquals(mdl.getTestBlob(),
-        mdl.getValueByKey( MdlTblTest.TEST_BLOB ));
+        mdl.get( MdlTblTest.TEST_BLOB ));
     Assert.assertEquals(mdl.getTestDouble(),
-        mdl.getValueByKey( MdlTblTest.TEST_DOUBLE ));
+        mdl.get( MdlTblTest.TEST_DOUBLE ));
     Assert.assertEquals(mdl.getTestFloat(),
-        mdl.getValueByKey( MdlTblTest.TEST_FLOAT ));
+        mdl.get( MdlTblTest.TEST_FLOAT ));
     Assert.assertEquals(mdl.getTestTinyint(),
-        mdl.getValueByKey( MdlTblTest.TEST_TINYINT ));
+        mdl.get( MdlTblTest.TEST_TINYINT ));
     Assert.assertEquals(mdl.getTestInt(),
-        mdl.getValueByKey( MdlTblTest.TEST_INT ));
+        mdl.get( MdlTblTest.TEST_INT ));
     Assert.assertEquals(mdl.getTestDecimal(),
-        mdl.getValueByKey( MdlTblTest.TEST_DECIMAL ));
+        mdl.get( MdlTblTest.TEST_DECIMAL ));
     Assert.assertEquals(mdl.getTestBigint(),
-        mdl.getValueByKey( MdlTblTest.TEST_BIGINT ));
+        mdl.get( MdlTblTest.TEST_BIGINT ));
     Assert.assertEquals(mdl.getTestDatetime(),
-        mdl.getValueByKey( MdlTblTest.TEST_DATETIME ));
+        mdl.get( MdlTblTest.TEST_DATETIME ));
     Assert.assertEquals(mdl.getTestOrder(),
-        mdl.getValueByKey( MdlTblTest.TEST_ORDER ));
+        mdl.get( MdlTblTest.TEST_ORDER ));
     Assert.assertEquals(mdl.getCreateDate(),
-        mdl.getValueByKey( MdlTblTest.CREATE_DATE ));
+        mdl.get( MdlTblTest.CREATE_DATE ));
     Assert.assertEquals(mdl.getCreateTime(),
-        mdl.getValueByKey( MdlTblTest.CREATE_TIME ));
+        mdl.get( MdlTblTest.CREATE_TIME ));
     Assert.assertEquals(mdl.getUpdateDate(),
-        mdl.getValueByKey( MdlTblTest.UPDATE_DATE ));
+        mdl.get( MdlTblTest.UPDATE_DATE ));
     Assert.assertEquals(mdl.getUpdateTime(),
-        mdl.getValueByKey( MdlTblTest.UPDATE_TIME ));
+        mdl.get( MdlTblTest.UPDATE_TIME ));
     Assert.assertEquals(mdl.getUpdateUserId(),
-        mdl.getValueByKey( MdlTblTest.UPDATE_USER_ID ));
+        mdl.get( MdlTblTest.UPDATE_USER_ID ));
     Assert.assertEquals(mdl.getUpdateScreenId(),
-        mdl.getValueByKey( MdlTblTest.UPDATE_SCREEN_ID ));
+        mdl.get( MdlTblTest.UPDATE_SCREEN_ID ));
 
   }
 

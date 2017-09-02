@@ -352,7 +352,7 @@
 <span class="sourceLineNo">344</span>   * @return Object 对应键名值。<a name="line.344"></a>
 <span class="sourceLineNo">345</span>   */<a name="line.345"></a>
 <span class="sourceLineNo">346</span>  @Override<a name="line.346"></a>
-<span class="sourceLineNo">347</span>  public Object getValueByKey(String key) {<a name="line.347"></a>
+<span class="sourceLineNo">347</span>  public Object get(String key) {<a name="line.347"></a>
 <span class="sourceLineNo">348</span>    Object ret = null;<a name="line.348"></a>
 <span class="sourceLineNo">349</span>    if (MdlTable.TABLE_CAT.equals(key)) {<a name="line.349"></a>
 <span class="sourceLineNo">350</span>      ret = this.getTableCat();<a name="line.350"></a>
@@ -404,7 +404,7 @@
 <span class="sourceLineNo">396</span>   */<a name="line.396"></a>
 <span class="sourceLineNo">397</span>  @SuppressWarnings("unchecked")<a name="line.397"></a>
 <span class="sourceLineNo">398</span>  @Override<a name="line.398"></a>
-<span class="sourceLineNo">399</span>  public void setValueByKey(String key, Object value) {<a name="line.399"></a>
+<span class="sourceLineNo">399</span>  public IKeyValue set(String key, Object value) {<a name="line.399"></a>
 <span class="sourceLineNo">400</span>    if (MdlTable.TABLE_CAT.equals(key)) {<a name="line.400"></a>
 <span class="sourceLineNo">401</span>      this.setTableCat((java.lang.String) value);<a name="line.401"></a>
 <span class="sourceLineNo">402</span>    }<a name="line.402"></a>
@@ -444,8 +444,9 @@
 <span class="sourceLineNo">436</span>    if (MdlTable.INDEXS.equals(key)) {<a name="line.436"></a>
 <span class="sourceLineNo">437</span>      this.setIndexs((java.util.ArrayList&lt;MdlIndex&gt;) value);<a name="line.437"></a>
 <span class="sourceLineNo">438</span>    }<a name="line.438"></a>
-<span class="sourceLineNo">439</span>  }<a name="line.439"></a>
-<span class="sourceLineNo">440</span>}<a name="line.440"></a>
+<span class="sourceLineNo">439</span>    return this;<a name="line.439"></a>
+<span class="sourceLineNo">440</span>  }<a name="line.440"></a>
+<span class="sourceLineNo">441</span>}<a name="line.441"></a>
 
 
 

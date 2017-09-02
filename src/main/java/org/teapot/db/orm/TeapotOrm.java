@@ -16,12 +16,19 @@
 
 package org.teapot.db.orm;
 
+import org.teapot.db.orm.mdl.Columns;
 import org.teapot.db.orm.mdl.Condition;
+import org.teapot.db.orm.mdl.From;
+import org.teapot.db.orm.mdl.Group;
+import org.teapot.db.orm.mdl.Hav;
+import org.teapot.db.orm.mdl.IClause;
 import org.teapot.db.orm.mdl.MdlColumn;
 import org.teapot.db.orm.mdl.MdlIndex;
 import org.teapot.db.orm.mdl.MdlPrimaryKey;
 import org.teapot.db.orm.mdl.MdlTable;
 import org.teapot.db.orm.mdl.OptOrder;
+import org.teapot.db.orm.mdl.Orderby;
+import org.teapot.db.orm.mdl.Query;
 import org.teapot.db.orm.util.UModel;
 import org.teapot.db.orm.util.UModelConstant;
 import org.teapot.db.TeapotDb;
@@ -41,17 +48,24 @@ import java.util.Map;
 
 /**
  * 对象关系映射类。
+ *
+ * <p>
+ * 使用枚举代码显得不够简洁，改为单实例。(2017/08/31)
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public enum TeapotOrm {
   INSTANCE;
+
   private Map<String, MdlTable> tblInfo = new ConcurrentHashMap<String, MdlTable>();
+  private IConv idefConv = new DefConv();
 
   /**
    * getTableNamePattern.
    * @param meta DatabaseMetaData
    * @return String
    * @throws SQLException 处理过程中发生的异常。
+   * @since 0.0.1
    */
   private String getTableNamePattern(DatabaseMetaData meta)
       throws SQLException {
@@ -68,13 +82,14 @@ public enum TeapotOrm {
   /**
    * 通过MetaData获取表信息.
    * @return 表信息。
+   * @since 0.0.1
    */
   public List<MdlTable> getTableInfo() {
     System.out.println("------------------getTableInfo():" + tblInfo);
     Connection conn = null;
     List<MdlTable> tables = new ArrayList<MdlTable>();
     try {
-      TeapotDb.getInstance().init();
+//      TeapotDb.getInstance().init();
 
       // connect to the 'sample' database
       conn = TeapotDb.getInstance().getConnection();
@@ -92,8 +107,10 @@ public enum TeapotOrm {
       System.out.println("数据库的系统函数的逗号分隔列表: " + dbmd.getSystemFunctions());
       System.out.println("数据库的时间和日期函数的逗号分隔列表: " + dbmd.getTimeDateFunctions());
       System.out.println("数据库的字符串函数的逗号分隔列表: " + dbmd.getStringFunctions());
-      String schema = conn.getSchema();
-      System.out.println("schema=" + schema);
+      String schema = null;
+      /* 在DBCP的时候取不到  */
+//      String schema = conn.getSchema();
+//      System.out.println("schema=" + schema);
       System.out.println("数据库供应商用于 'schema' 的首选术语: " + dbmd.getSchemaTerm());
       System.out.println("数据库URL: " + dbmd.getURL());
       System.out.println("是否允许只读:" + dbmd.isReadOnly());
@@ -204,9 +221,7 @@ public enum TeapotOrm {
           cols.add(col);
         }
         rs.close();
-        ArrayList<OptOrder> keys = new ArrayList<OptOrder>();
-        keys.add(new OptOrder(MdlColumn.ORDINAL_POSITION));
-        UModel.sort(cols, keys);
+        UModel.sort(cols, new Orderby(MdlColumn.ORDINAL_POSITION).orderby());
         tname.setColmuns(cols);
 
         ArrayList<MdlPrimaryKey> prmKeys = new ArrayList<MdlPrimaryKey>();
@@ -229,9 +244,8 @@ public enum TeapotOrm {
           prmKeys.add(pk);
         }
         rs.close();
-        ArrayList<OptOrder> skeys = new ArrayList<OptOrder>();
-        keys.add(new OptOrder(MdlPrimaryKey.KEY_SEQ));
-        UModel.sort(prmKeys, skeys);
+
+        UModel.sort(prmKeys, new Orderby(MdlPrimaryKey.KEY_SEQ).orderby());
         tname.setPrimaryKeys(prmKeys);
 
         ArrayList<MdlIndex> idxs = new ArrayList<MdlIndex>();
@@ -279,20 +293,20 @@ public enum TeapotOrm {
       // roll back any changes to the database made by this sample
       // conn.rollback();
       // disconnect from the 'sample' database
-      if (conn != null ) {
-        try {
-          TeapotDb.getInstance().releaseConnection(conn);
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
+      try {
+        TeapotDb.getInstance().releaseConnection(conn);
+      } catch (SQLException e) {
+        e.printStackTrace();
       }
     }
     return tables;
   }
+
   /**
    * 获取指定对象表的信息.
    * @param str 对象表。
    * @return 对象表的信息。
+   * @since 0.0.1
    */
   public MdlTable getTable(String str) {
     if (str == null || str.length() <= 0) {
@@ -324,46 +338,34 @@ public enum TeapotOrm {
    * @param data 数据。
    * @return 插入件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public int insert(String tableName, IKeyValue data) throws SQLException {
+    return this.insert(tableName, data, this.idefConv);
+  }
+  /**
+   * 向表插入数据.
+   * @param tableName 表。
+   * @param data 数据。
+   * @param iconv 变换处理
+   * @return 插入件数。
+   * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.2
+   */
+  public int insert(String tableName, IKeyValue data, IConv iconv) throws SQLException {
     int result = 0;
     if (data == null) {
       return result;
     }
+    long startTime = 0;
     Connection conn = null;
-    PreparedStatement stmt = null;
 
-    ResultSet rs = null;
-    MdlTable tblInfo = getTable(tableName);
-    System.out.println(tblInfo);
-
-    StringBuffer buf = new StringBuffer();
-    buf.append("INSERT INTO ");
-    buf.append(tableName);
-    buf.append(" VALUES( ");
-    int max = tblInfo.getColmuns().size();
-    for (int i = 0; i < max; i ++) {
-      buf.append("?");
-      if (i < (max - 1)) {
-        buf.append(", ");
-      }
-    }
-    buf.append(");");
-
-    String sql = buf.toString();
     try {
+      startTime = System.currentTimeMillis();
       conn = TeapotDb.getInstance().getConnection();
       conn.setAutoCommit(false);
-      stmt = conn.prepareStatement(sql);
+      result = insert(tableName, data, iconv, conn);
 
-      IKeyValue obj = data;
-      System.out.println("insert:" + obj);
-      for (int idx = 0; idx < tblInfo.getColmuns().size(); idx ++) {
-        MdlColumn col = tblInfo.getColmuns().get(idx);
-        stmt.setObject(idx + 1, obj.getValueByKey(col.getTableName() + "." + col.getColumnName()));
-      }
-
-      result += stmt.executeUpdate();
       conn.commit();
 
     } catch (SQLException e) {
@@ -371,20 +373,6 @@ public enum TeapotOrm {
       e.printStackTrace();
       throw e;
     } finally {
-      if (rs != null ) {
-        try {
-          rs.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
-      if (stmt != null ) {
-        try {
-          stmt.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
       if (conn != null ) {
         try {
           TeapotDb.getInstance().releaseConnection(conn);
@@ -393,6 +381,9 @@ public enum TeapotOrm {
         }
       }
     }
+    long endTime = System.currentTimeMillis();
+    System.out.println("insert:" + data);
+    System.out.println("★★★★★insert处理耗时" + (endTime - startTime) + "毫秒。");
     return result;
   }
   /**
@@ -402,16 +393,36 @@ public enum TeapotOrm {
    * @param conn 数据库连接。
    * @return 插入件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public int insert(String tableName, IKeyValue data, Connection conn) throws SQLException {
+    return this.insert(tableName, data, this.idefConv, conn);
+  }
+  /**
+   * 向表插入数据.
+   * @param tableName 表。
+   * @param data 数据。
+   * @param iconv 变换处理
+   * @param conn 数据库连接。
+   * @return 插入件数。
+   * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.2
+   */
+  public int insert(String tableName, IKeyValue data, IConv iconv, Connection conn)
+      throws SQLException {
     int result = 0;
     if (data == null) {
       return result;
     }
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
 
     PreparedStatement stmt = null;
-
     ResultSet rs = null;
+
+    startTime = System.currentTimeMillis();
     MdlTable tblInfo = getTable(tableName);
     System.out.println(tblInfo);
 
@@ -420,9 +431,11 @@ public enum TeapotOrm {
     buf.append(tableName);
     buf.append(" VALUES( ");
     int max = tblInfo.getColmuns().size();
-    for (int i = 0; i < max; i ++) {
+    int id1 = 0;
+    while (id1 < max) {
       buf.append("?");
-      if (i < (max - 1)) {
+      id1 ++;
+      if (id1 < max) {
         buf.append(", ");
       }
     }
@@ -432,14 +445,20 @@ public enum TeapotOrm {
     try {
       stmt = conn.prepareStatement(sql);
 
+      time3 = System.currentTimeMillis();
       IKeyValue obj = data;
-      System.out.println("insert:" + obj);
-      for (int idx = 0; idx < tblInfo.getColmuns().size(); idx ++) {
+      stmt.setObject(max, null);
+      int idx = 0;
+      while (idx < max) {
         MdlColumn col = tblInfo.getColmuns().get(idx);
-        stmt.setObject(idx + 1, obj.getValueByKey(col.getTableName() + "." + col.getColumnName()));
+        idx ++;
+//        stmt.setObject(idx, obj.getValueByKey(col.getTableName() + "." + col.getColumnName()));
+        iconv.conv2Db(stmt, idx, col, obj);
       }
 
+      time1 = System.currentTimeMillis();
       result += stmt.executeUpdate();
+      time2 = System.currentTimeMillis();
 
     } catch (SQLException e) {
       conn.rollback();
@@ -461,6 +480,11 @@ public enum TeapotOrm {
         }
       }
     }
+    long endTime = System.currentTimeMillis();
+    System.out.println("insert:" + data);
+    System.out.println("★★★★★insert处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
     return result;
   }
 
@@ -471,51 +495,38 @@ public enum TeapotOrm {
    * @param <T> 实现接口IKeyValue的类。
    * @return 插入件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public <T extends IKeyValue> int insert(String tableName, List<T> data) throws SQLException {
+    return this.insert(tableName, data, this.idefConv);
+  }
+  /**
+   * 向表插入数据.
+   * @param tableName 表。
+   * @param data 数据。
+   * @param <T> 实现接口IKeyValue的类。
+   * @param iconv 变换处理
+   * @return 插入件数。
+   * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.2
+   */
+  public <T extends IKeyValue> int insert(String tableName, List<T> data, IConv iconv)
+      throws SQLException {
     int result = 0;
     if (data == null) {
       return result;
     }
+    long startTime = 0;
+
     Connection conn = null;
-    PreparedStatement stmt = null;
 
-    ResultSet rs = null;
-    MdlTable tblInfo = getTable(tableName);
-    System.out.println(tblInfo);
+    startTime = System.currentTimeMillis();
 
-    StringBuffer buf = new StringBuffer();
-    buf.append("INSERT INTO ");
-    buf.append(tableName);
-    buf.append(" VALUES( ");
-    int max = tblInfo.getColmuns().size();
-    for (int i = 0; i < max; i ++) {
-      buf.append("?");
-      if (i < (max - 1)) {
-        buf.append(", ");
-      }
-    }
-    buf.append(");");
-
-    String sql = buf.toString();
     try {
       conn = TeapotDb.getInstance().getConnection();
       conn.setAutoCommit(false);
-      stmt = conn.prepareStatement(sql);
+      result = insert(tableName, data, conn, iconv);
 
-      for (IKeyValue obj : data) {
-        System.out.println("insert:" + obj);
-        for (int idx = 0; idx < tblInfo.getColmuns().size(); idx ++) {
-          MdlColumn col = tblInfo.getColmuns().get(idx);
-          stmt.setObject(idx + 1,
-              obj.getValueByKey(col.getTableName() + "." + col.getColumnName()));
-        }
-        stmt.addBatch();
-      }
-      int[] irecs = stmt.executeBatch();
-      for (int k : irecs) {
-        result += k;
-      }
       conn.commit();
 
     } catch (SQLException e) {
@@ -523,20 +534,7 @@ public enum TeapotOrm {
       e.printStackTrace();
       throw e;
     } finally {
-      if (rs != null) {
-        try {
-          rs.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
-      if (stmt != null) {
-        try {
-          stmt.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
+
       if (conn != null) {
         try {
           TeapotDb.getInstance().releaseConnection(conn);
@@ -545,6 +543,8 @@ public enum TeapotOrm {
         }
       }
     }
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★insert处理耗时" + (endTime - startTime) + "毫秒。");
     return result;
   }
   /**
@@ -555,17 +555,38 @@ public enum TeapotOrm {
    * @param <T> 实现接口IKeyValue的类。
    * @return 插入件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public <T extends IKeyValue> int insert(String tableName, List<T> data, Connection conn)
       throws SQLException {
+    return insert(tableName, data, conn, this.idefConv);
+  }
+
+  /**
+   * 向表插入数据.
+   * @param tableName 表。
+   * @param data 数据。
+   * @param conn 数据库连接。
+   * @param <T> 实现接口IKeyValue的类。
+   * @return 插入件数。
+   * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
+   */
+  public <T extends IKeyValue> int insert(String tableName, List<T> data, Connection conn,
+      IConv iconv) throws SQLException {
     int result = 0;
     if (data == null) {
       return result;
     }
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
 
     PreparedStatement stmt = null;
-
     ResultSet rs = null;
+
+    startTime = System.currentTimeMillis();
     MdlTable tblInfo = getTable(tableName);
     System.out.println(tblInfo);
 
@@ -574,9 +595,11 @@ public enum TeapotOrm {
     buf.append(tableName);
     buf.append(" VALUES( ");
     int max = tblInfo.getColmuns().size();
-    for (int i = 0; i < max; i ++) {
+    int id1 = 0;
+    while (id1 < max) {
       buf.append("?");
-      if (i < (max - 1)) {
+      id1 ++;
+      if (id1 < max) {
         buf.append(", ");
       }
     }
@@ -586,20 +609,26 @@ public enum TeapotOrm {
     try {
       stmt = conn.prepareStatement(sql);
 
-      for (IKeyValue obj : data) {
+      time3 = System.currentTimeMillis();
+      for (int index = 0, maxSize = data.size(); index < maxSize; index ++) {
+        IKeyValue obj = data.get(index);
         System.out.println("insert:" + obj);
-        for (int idx = 0; idx < tblInfo.getColmuns().size(); idx ++) {
+        int idx = 0;
+        while (idx < max) {
           MdlColumn col = tblInfo.getColmuns().get(idx);
-          stmt.setObject(idx + 1,
-              obj.getValueByKey(col.getTableName() + "." + col.getColumnName()));
+          idx ++;
+          stmt.setObject(idx,
+              obj.get(col.getTableName() + "." + col.getColumnName()));
         }
         stmt.addBatch();
       }
+      time1 = System.currentTimeMillis();
       int[] irecs = stmt.executeBatch();
+      time2 = System.currentTimeMillis();
+
       for (int k : irecs) {
         result += k;
       }
-
     } catch (SQLException e) {
       conn.rollback();
       e.printStackTrace();
@@ -620,6 +649,10 @@ public enum TeapotOrm {
         }
       }
     }
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★insert处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
     return result;
   }
 
@@ -633,117 +666,39 @@ public enum TeapotOrm {
    * @param condition 条件。
    * @param orderby 排序。
    * @param <T> 实现接口IKeyValue的类。
-   * @return 数据。
+   * @return Query。
+   * @since TeapotORM 0.0.1
    */
   public <T extends IKeyValue> List<T> select(String tableName, Class<T> cls, Condition condition,
       List<OptOrder> orderby) {
+    return this.select(tableName, cls, condition, orderby, this.idefConv);
+  }
+  /**
+   * 从表中检索数据.
+   * @param tableName 表。
+   * @param cls 返回集合元素的类名。
+   * @param condition 条件。
+   * @param orderby 排序。
+   * @param <T> 实现接口IKeyValue的类。
+   * @param iconv 变换处理
+   * @return Query。
+   * @since TeapotORM 0.0.2
+   */
+  public <T extends IKeyValue> List<T> select(String tableName, Class<T> cls, Condition condition,
+      List<OptOrder> orderby, IConv iconv) {
+    long startTime = 0;
     List<T> result = new ArrayList<T>();
     //
     Connection conn = null;
-    PreparedStatement stmt = null;
-    ResultSet rs = null;
-    MdlTable tblInfo = getTable(tableName);
-    System.out.println(tblInfo);
 
-    StringBuffer buf = new StringBuffer();
-    /* SELECT */
-    buf.append("SELECT ");
-    List<MdlColumn> cols = tblInfo.getColmuns();
-    int maxLen = cols.size();
-    for (int i = 0; i < maxLen; i ++) {
-      MdlColumn column = cols.get(i);
-      buf.append(column.getColumnName());
-      if (i < (maxLen - 1)) {
-        buf.append(",");
-      }
-    }
-    /* FROM */
-    buf.append(" FROM ");
-    buf.append(tableName);
-    /* WHERE */
-    if (condition != null) {
-      buf.append(condition);
-    }
-
-    /* ORDER BY */
-    if (orderby != null) {
-      buf.append(" ORDER BY ");
-      for (int i = 0; i < orderby.size(); i ++ ) {
-        OptOrder odr = orderby.get(i);
-        buf.append(odr.getCloumn());
-        if (odr.getOrder() == UModelConstant.SORT_DSC) {
-          buf.append(" DESC ");
-        } else {
-          buf.append(" ASC ");
-        }
-        if (i < (orderby.size() - 1)) {
-          buf.append(",");
-        }
-      }
-    }
-
-    String sqlCmd = buf.toString();
-    System.out.println("sqlCmd=" + sqlCmd);
-//    Class<?> c = null;
-//    try {
-//      c = Class.forName(getTblMdl(tableName));
-//    } catch (ClassNotFoundException e1) {
-//      e1.printStackTrace();
-//    }
-
+    startTime = System.currentTimeMillis();
     try {
       conn = TeapotDb.getInstance().getConnection();
-      stmt = conn.prepareStatement(sqlCmd);
-      if (condition != null) {
-        List<?> values = condition.getValues();
-        System.out.println("条件字段的个数：" + values.size());
-        for (int i = 0; i < values.size(); i ++) {
-          Object value = (Object) values.get(i);
-          stmt.setObject((i + 1), value);
-        }
-      }
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        T obj = null;
-        try {
-          obj = (T) cls.newInstance();
-        } catch (InstantiationException e1) {
-          e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-          e1.printStackTrace();
-        }
-        for (int i = 0; i < maxLen; i ++) {
-          MdlColumn column = cols.get(i);
-          System.out.println("TeapotOrm::ColumnName" + column.getColumnName()
-              + ",JavaType=" + column.getTypeNameJava());
-          if ("java.lang.Long".equals(column.getTypeNameJava())) {
-            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
-                rs.getLong(column.getColumnName()));
-          } else {
-            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
-                rs.getObject(column.getColumnName()));
-          }
-        }
-
-        result.add(obj);
-      }
+      result = select(tableName, cls, condition, orderby, iconv, conn);
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      if (rs != null) {
-        try {
-          rs.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
-      if (stmt != null) {
-        try {
-          stmt.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
+
       if (conn != null) {
         try {
           TeapotDb.getInstance().releaseConnection(conn);
@@ -752,8 +707,11 @@ public enum TeapotOrm {
         }
       }
     }
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★select处理耗时" + (endTime - startTime) + "毫秒。");
     return result;
   }
+
   /**
    * 从表中检索数据.
    * @param tableName 表。
@@ -762,14 +720,40 @@ public enum TeapotOrm {
    * @param orderby 排序。
    * @param conn 数据库连接。
    * @param <T> 实现接口IKeyValue的类。
-   * @return 数据。
+   * @return Query。
+   * @throws SQLException 返回处理过程中发生的异常。
+   * @since TeapotORM 0.0.1
    */
   public <T extends IKeyValue> List<T> select(String tableName, Class<T> cls, Condition condition,
-      List<OptOrder> orderby, Connection conn) {
+      List<OptOrder> orderby, Connection conn) throws SQLException {
+    return this.select(tableName, cls, condition, orderby, this.idefConv, conn);
+  }
+  /**
+   * 从表中检索数据.
+   * @param tableName 表。
+   * @param cls 返回集合元素的类名。
+   * @param condition 条件。
+   * @param orderby 排序。
+   * @param iconv 变换处理
+   * @param conn 数据库连接。
+   * @param <T> 实现接口IKeyValue的类。
+   * @return Query。
+   * @throws SQLException 返回处理过程中发生的异常。
+   * @since TeapotORM 0.0.2
+   */
+  public <T extends IKeyValue> List<T> select(String tableName, Class<T> cls, Condition condition,
+      List<OptOrder> orderby, IConv iconv, Connection conn) throws SQLException {
+
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
     List<T> result = new ArrayList<T>();
     //
     PreparedStatement stmt = null;
     ResultSet rs = null;
+
+    startTime = System.currentTimeMillis();
     MdlTable tblInfo = getTable(tableName);
     System.out.println(tblInfo);
 
@@ -778,10 +762,12 @@ public enum TeapotOrm {
     buf.append("SELECT ");
     List<MdlColumn> cols = tblInfo.getColmuns();
     int maxLen = cols.size();
-    for (int i = 0; i < maxLen; i ++) {
-      MdlColumn column = cols.get(i);
+    int id1 = 0;
+    while (id1 < maxLen) {
+      MdlColumn column = cols.get(id1);
       buf.append(column.getColumnName());
-      if (i < (maxLen - 1)) {
+      id1 ++;
+      if (id1 < maxLen) {
         buf.append(",");
       }
     }
@@ -796,15 +782,18 @@ public enum TeapotOrm {
     /* ORDER BY */
     if (orderby != null) {
       buf.append(" ORDER BY ");
-      for (int i = 0; i < orderby.size(); i ++ ) {
-        OptOrder odr = orderby.get(i);
+      int id2 = 0;
+      int maxSize = orderby.size();
+      while (id2 < maxSize) {
+        OptOrder odr = orderby.get(id2);
         buf.append(odr.getCloumn());
         if (odr.getOrder() == UModelConstant.SORT_DSC) {
           buf.append(" DESC ");
         } else {
           buf.append(" ASC ");
         }
-        if (i < (orderby.size() - 1)) {
+        id2 ++;
+        if (id2 < maxSize) {
           buf.append(",");
         }
       }
@@ -812,24 +801,25 @@ public enum TeapotOrm {
 
     String sqlCmd = buf.toString();
     System.out.println("sqlCmd=" + sqlCmd);
-//    Class<?> c = null;
-//    try {
-//      c = Class.forName(getTblMdl(tableName));
-//    } catch (ClassNotFoundException e1) {
-//      e1.printStackTrace();
-//    }
 
     try {
       stmt = conn.prepareStatement(sqlCmd);
+
+      time3 = System.currentTimeMillis();
       if (condition != null) {
         List<?> values = condition.getValues();
         System.out.println("条件字段的个数：" + values.size());
-        for (int i = 0; i < values.size(); i ++) {
-          Object value = (Object) values.get(i);
-          stmt.setObject((i + 1), value);
+        int id3 = 0;
+        int maxLength = values.size();
+        while (id3 < maxLength) {
+          Object value = (Object) values.get(id3);
+          id3 ++;
+          stmt.setObject(id3, value);
         }
       }
+      time1 = System.currentTimeMillis();
       rs = stmt.executeQuery();
+      time2 = System.currentTimeMillis();
       while (rs.next()) {
         T obj = null;
         try {
@@ -841,15 +831,367 @@ public enum TeapotOrm {
         }
         for (int i = 0; i < maxLen; i ++) {
           MdlColumn column = cols.get(i);
-          System.out.println("TeapotOrm::ColumnName" + column.getColumnName()
-              + ",JavaType=" + column.getTypeNameJava());
-          if ("java.lang.Long".equals(column.getTypeNameJava())) {
-            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
-                rs.getLong(column.getColumnName()));
+          iconv.conv2Mdl(column, rs, obj);
+//          System.out.println("TeapotOrm::ColumnName" + column.getColumnName()
+//              + ",JavaType=" + column.getTypeNameJava());
+//          if ("java.lang.Long".equals(column.getTypeNameJava())) {
+//            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
+//                rs.getLong(column.getColumnName()));
+//          } else {
+//            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
+//                rs.getObject(column.getColumnName()));
+//          }
+        }
+
+        result.add(obj);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if (rs != null) {
+        try {
+          rs.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+      if (stmt != null) {
+        try {
+          stmt.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★select处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
+    return result;
+  }
+
+
+  /**
+   * 从表中检索数据.
+   * @param tableName 表。
+   * @param cls 返回集合元素的类名。
+   * @param clauses 子句。
+   * @param <T> 实现接口IKeyValue的类。
+   * @return Query。
+   * @throws SQLException 返回处理过程中发生的异常。
+   * @since TeapotORM 0.0.2
+   */
+  public <T extends IKeyValue> Query select(String tableName, Class<T> cls, IClause... clauses)
+      throws SQLException {
+
+//    long startTime = 0;
+//    long time1 = 0;
+//    long time2 = 0;
+//    long time3 = 0;
+//    List<T> result = new ArrayList<T>();
+    //
+//    PreparedStatement stmt = null;
+//    ResultSet rs = null;
+
+//    startTime = System.currentTimeMillis();
+
+    /*
+     * Mysql
+     * SELECT
+     *     [ALL | DISTINCT | DISTINCTROW ]
+     *       [HIGH_PRIORITY]
+     *       [STRAIGHT_JOIN]
+     *       [SQL_SMALL_RESULT] [SQL_BIG_RESULT] [SQL_BUFFER_RESULT]
+     *       [SQL_CACHE | SQL_NO_CACHE] [SQL_CALC_FOUND_ROWS]
+     *     select_expr [, select_expr ...]
+     *     [FROM table_references
+     *       [PARTITION partition_list]
+     *     [WHERE where_condition]
+     *     [GROUP BY {col_name | expr | position}
+     *       [ASC | DESC], ... [WITH ROLLUP]]
+     *     [HAVING where_condition]
+     *     [ORDER BY {col_name | expr | position}
+     *       [ASC | DESC], ...]
+     *     [LIMIT {[offset,] row_count | row_count OFFSET offset}]
+     *     [PROCEDURE procedure_name(argument_list)]
+     *     [INTO OUTFILE 'file_name'
+     *         [CHARACTER SET charset_name]
+     *         export_options
+     *       | INTO DUMPFILE 'file_name'
+     *       | INTO var_name [, var_name]]
+     *     [FOR UPDATE | LOCK IN SHARE MODE]]
+     */
+    Columns colus = null;
+    From from = null;
+    Condition condition = null;
+    Group grpby = null;
+    Hav hav = null;
+    Orderby ordby = null;
+    int ida = 0;
+    int maa = clauses.length;
+    while (ida < maa) {
+      IClause clause = clauses[ida];
+      if (clause instanceof Columns) {
+        colus = (Columns) clause;
+      }
+      if (clause instanceof From) {
+        from = (From) clause;
+      }
+      if (clause instanceof Condition && !(clause instanceof Hav)) {
+        condition = (Condition) clause;
+      }
+      if (clause instanceof Group) {
+        grpby = (Group) clause;
+      }
+      if (clause instanceof Hav) {
+        hav = (Hav) clause;
+      }
+      if (clause instanceof Orderby) {
+        ordby = (Orderby) clause;
+      }
+      ida ++;
+    }
+    System.out.println("SELECT ITEM:" + colus);
+    System.out.println("FROM:" + from);
+    System.out.println("WHERE:" + condition);
+    System.out.println("GROUPBY:" + grpby);
+    System.out.println("ORDERBY:" + ordby);
+
+
+    StringBuffer buf = new StringBuffer();
+    /*
+     * SELECT [ DISTINCT | ALL ] SelectItem [ , SelectItem ]*
+     * FROM clause
+     * [ WHERE clause ]
+     * [ GROUP BY clause ]
+     * [ HAVING clause ]
+     * [ ORDER BY clause ]
+     * [ result offset clause ]
+     * [ fetch first clause ]
+     * SelectItem:
+     *
+     * {
+     *     * |
+     *     { table-Name | correlation-Name } .* |
+     *     Expression [AS Simple-column-Name ]
+     * }
+     */
+    buf.append("SELECT ");
+    if (colus == null) {
+      MdlTable tblInfo = getTable(tableName);
+      System.out.println(tblInfo);
+      List<MdlColumn> cols = tblInfo.getColmuns();
+      int maxLen = cols.size();
+      int id1 = 0;
+      while (id1 < maxLen) {
+        MdlColumn column = cols.get(id1);
+        buf.append(column.getColumnName());
+        id1 ++;
+        if (id1 < maxLen) {
+          buf.append(",");
+        }
+      }
+    } else {
+      buf.append(colus);
+    }
+
+    /*
+     * FROM TableExpression [ , TableExpression ] *
+     */
+    buf.append(" FROM ");
+    if (from == null) {
+      buf.append(tableName);
+    } else {
+      buf.append(from);
+    }
+
+    /*
+     * WHERE Boolean expression
+     */
+    if (condition != null) {
+      buf.append(condition);
+    }
+
+    /*
+     *     [GROUP BY {col_name | expr | position}
+     *       [ASC | DESC], ... [WITH ROLLUP]]
+     */
+    if (grpby != null) {
+      buf.append(" GROUP BY ");
+      buf.append(grpby);
+    }
+
+    if (hav != null) {
+      buf.append(" HAVING ");
+      buf.append(hav);
+    }
+    /*
+     * ORDER BY { column-Name | ColumnPosition | Expression }
+     * [ ASC | DESC ]
+     * [ NULLS FIRST | NULLS LAST ]
+     * [ , column-Name | ColumnPosition | Expression
+     * [ ASC | DESC ]
+     * [ NULLS FIRST | NULLS LAST ]
+     * ] *
+     */
+    if (ordby != null) {
+      List<OptOrder> orderby = ordby.orderby();
+      int maxSize = orderby.size();
+      System.out.println("orderby size" + maxSize);
+      if (maxSize > 0) {
+        buf.append(" ORDER BY ");
+        int id2 = 0;
+        while (id2 < maxSize) {
+          OptOrder odr = orderby.get(id2);
+          buf.append(odr.getCloumn());
+          if (odr.getOrder() == UModelConstant.SORT_DSC) {
+            buf.append(" DESC ");
           } else {
-            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
-                rs.getObject(column.getColumnName()));
+            buf.append(" ASC ");
           }
+          id2 ++;
+          if (id2 < maxSize) {
+            buf.append(",");
+          }
+        }
+      }
+    }
+
+    String sqlCmd = buf.toString();
+    System.out.println("sqlCmd=" + sqlCmd);
+    return new Query(sqlCmd, condition, null, null);
+  }
+
+  /**
+   * 从表中检索数据【悲观锁】.
+   * @param tableName 表。
+   * @param cls 返回集合元素的类名。
+   * @param condition 条件。
+   * @param orderby 排序。
+   * @param conn 数据库连接。
+   * @param <T> 实现接口IKeyValue的类。
+   * @return 数据。
+   * @since TeapotORM 0.0.2
+   */
+  public <T extends IKeyValue> List<T> select4update(String tableName, Class<T> cls,
+      Condition condition, List<OptOrder> orderby, Connection conn) {
+    return this.select4update(tableName, cls, condition, orderby, this.idefConv, conn);
+  }
+  /**
+   * 从表中检索数据【悲观锁】.
+   * @param tableName 表。
+   * @param cls 返回集合元素的类名。
+   * @param condition 条件。
+   * @param orderby 排序。
+   * @param iconv 变换处理
+   * @param conn 数据库连接。
+
+   * @param <T> 实现接口IKeyValue的类。
+   * @return 数据。
+   * @since TeapotORM 0.0.2
+   */
+  public <T extends IKeyValue> List<T> select4update(String tableName, Class<T> cls,
+      Condition condition, List<OptOrder> orderby, IConv iconv, Connection conn) {
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
+    List<T> result = new ArrayList<T>();
+    //
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+
+    startTime = System.currentTimeMillis();
+    MdlTable tblInfo = getTable(tableName);
+    System.out.println(tblInfo);
+
+    StringBuffer buf = new StringBuffer();
+    /* SELECT */
+    buf.append("SELECT ");
+    List<MdlColumn> cols = tblInfo.getColmuns();
+    int maxLen = cols.size();
+    int id1 = 0;
+    while (id1 < maxLen) {
+      MdlColumn column = cols.get(id1);
+      buf.append(column.getColumnName());
+      id1 ++;
+      if (id1 < maxLen) {
+        buf.append(",");
+      }
+    }
+    /* FROM */
+    buf.append(" FROM ");
+    buf.append(tableName);
+    /* WHERE */
+    if (condition != null) {
+      buf.append(condition);
+    }
+
+    /* ORDER BY */
+    if (orderby != null) {
+      buf.append(" ORDER BY ");
+      int id2 = 0;
+      int maxSize = orderby.size();
+      while (id2 < maxSize) {
+        OptOrder odr = orderby.get(id2);
+        buf.append(odr.getCloumn());
+        if (odr.getOrder() == UModelConstant.SORT_DSC) {
+          buf.append(" DESC ");
+        } else {
+          buf.append(" ASC ");
+        }
+        id2 ++;
+        if (id2 < maxSize) {
+          buf.append(",");
+        }
+      }
+    }
+    buf.append("  FOR UPDATE ");
+
+    String sqlCmd = buf.toString();
+    System.out.println("sqlCmd=" + sqlCmd);
+
+    try {
+      stmt = conn.prepareStatement(sqlCmd);
+
+      time3 = System.currentTimeMillis();
+      if (condition != null) {
+        List<?> values = condition.getValues();
+        System.out.println("条件字段的个数：" + values.size());
+        int id3 = 0;
+        int maxLength = values.size();
+        while (id3 < maxLength) {
+          Object value = (Object) values.get(id3);
+          id3 ++;
+          stmt.setObject(id3, value);
+        }
+      }
+
+      time1 = System.currentTimeMillis();
+      rs = stmt.executeQuery();
+      time2 = System.currentTimeMillis();
+      while (rs.next()) {
+        T obj = null;
+        try {
+          obj = (T) cls.newInstance();
+        } catch (InstantiationException e1) {
+          e1.printStackTrace();
+        } catch (IllegalAccessException e1) {
+          e1.printStackTrace();
+        }
+        for (int i = 0; i < maxLen; i ++) {
+          MdlColumn column = cols.get(i);
+          iconv.conv2Mdl(column, rs, obj);
+//          System.out.println("TeapotOrm::ColumnName" + column.getColumnName()
+//              + ",JavaType=" + column.getTypeNameJava());
+//          if ("java.lang.Long".equals(column.getTypeNameJava())) {
+//            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
+//                rs.getLong(column.getColumnName()));
+//          } else {
+//            obj.setValueByKey(column.getTableName() + "." + column.getColumnName(),
+//                rs.getObject(column.getColumnName()));
+//          }
         }
 
         result.add(obj);
@@ -872,6 +1214,10 @@ public enum TeapotOrm {
         }
       }
     }
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★select处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
     return result;
   }
 
@@ -885,11 +1231,32 @@ public enum TeapotOrm {
    * @param data 更新数据。
    * @return 更新件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public int update(String tableName, Condition condition, IKeyValue data) throws SQLException {
+    return this.update(tableName, condition, data, this.idefConv);
+  }
+  /**
+   * 向表中更新数据.
+   * @param tableName 表。
+   * @param condition 条件。
+   * @param data 更新数据。
+   * @param iconv 变换处理
+   * @return 更新件数。
+   * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.2
+   */
+  public int update(String tableName, Condition condition, IKeyValue data, IConv iconv)
+      throws SQLException {
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
     int result = 0;
     Connection conn = null;
     PreparedStatement stmt = null;
+
+    startTime = System.currentTimeMillis();
     StringBuffer buf = new StringBuffer();
     /* UPDATE */
     buf.append("UPDATE ");
@@ -899,10 +1266,12 @@ public enum TeapotOrm {
     MdlTable tblInfo = getTable(tableName);
     System.out.println(tblInfo);
     int max = tblInfo.getColmuns().size();
-    for (int j = 0; j < max; j ++) {
-      buf.append(tblInfo.getColmuns().get(j).getColumnName());
+    int idj = 0;
+    while (idj < max) {
+      buf.append(tblInfo.getColmuns().get(idj).getColumnName());
       buf.append("= ? ");
-      if (j < (max - 1)) {
+      idj ++;
+      if (idj < max) {
         buf.append(", ");
       }
     }
@@ -920,27 +1289,31 @@ public enum TeapotOrm {
       conn.setAutoCommit(false);
       stmt = conn.prepareStatement(sqlCmd);
 
-      IKeyValue dat = data;
+      time3 = System.currentTimeMillis();
+//      IKeyValue dat = data;
       int idx = 0;
       // SET
       for (int j = 0; j < max; j ++) {
         MdlColumn col = tblInfo.getColmuns().get(j);
-        Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
+//        Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
         idx ++;
-        stmt.setObject(idx, value);
+//        stmt.setObject(idx, value);
+        iconv.conv2Db(stmt, idx, col, data);
       }
 
       // WHERE
       if (condition != null) {
         List<?> values = condition.getValues();
         System.out.println("条件字段的个数：" + values.size());
-        for (int j = 0; j < values.size(); j ++) {
-          Object value = (Object) values.get(j);
+        for (int id3 = 0, maxSize = values.size(); id3 < maxSize; id3 ++) {
+          Object value = (Object) values.get(id3);
           idx ++;
           stmt.setObject(idx, value);
         }
       }
+      time1 = System.currentTimeMillis();
       result += stmt.executeUpdate();
+      time2 = System.currentTimeMillis();
 
       conn.commit();
     } catch (SQLException ex) {
@@ -964,6 +1337,10 @@ public enum TeapotOrm {
         se.printStackTrace();
       } // end finally try
     } //end try
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★update处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
     return result;
   }
   /**
@@ -973,12 +1350,34 @@ public enum TeapotOrm {
    * @param data 更新数据。
    * @param conn 数据库连接。
    * @return 更新件数。
-   * @throws SQLException 返回处理过程中的异常。
+   * @throws SQLException 返回处理过程中发生的异常。
+   * @since 0.0.1
    */
   public int update(String tableName, Condition condition, IKeyValue data, Connection conn)
       throws SQLException {
+    return this.update(tableName, condition, data, conn, this.idefConv);
+  }
+  /**
+   * 向表中更新数据.
+   * @param tableName 表。
+   * @param condition 条件。
+   * @param data 更新数据。
+   * @param conn 数据库连接。
+   * @param iconv 变换处理
+   * @return 更新件数。
+   * @throws SQLException 返回处理过程中发生的异常。
+   * @since 0.0.2
+   */
+  public int update(String tableName, Condition condition, IKeyValue data, Connection conn,
+      IConv iconv) throws SQLException {
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
     int result = 0;
     PreparedStatement stmt = null;
+
+    startTime = System.currentTimeMillis();
     StringBuffer buf = new StringBuffer();
     /* UPDATE */
     buf.append("UPDATE ");
@@ -988,10 +1387,11 @@ public enum TeapotOrm {
     MdlTable tblInfo = getTable(tableName);
     System.out.println(tblInfo);
     int max = tblInfo.getColmuns().size();
-    for (int j = 0; j < max; j ++) {
+    for (int j = 0; j < max; ) {
       buf.append(tblInfo.getColmuns().get(j).getColumnName());
       buf.append("= ? ");
-      if (j < (max - 1)) {
+      j ++;
+      if (j < max) {
         buf.append(", ");
       }
     }
@@ -1002,19 +1402,21 @@ public enum TeapotOrm {
     }
 
     String sqlCmd = buf.toString();
-    System.out.println("sqlCmd=" + sqlCmd);
 
     try {
       stmt = conn.prepareStatement(sqlCmd);
 
-      IKeyValue dat = data;
+      time3 = System.currentTimeMillis();
+//      IKeyValue dat = data;
       int idx = 0;
       // SET
+      stmt.setObject(max, null);
       for (int j = 0; j < max; j ++) {
         MdlColumn col = tblInfo.getColmuns().get(j);
-        Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
+//        Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
         idx ++;
-        stmt.setObject(idx, value);
+//        stmt.setObject(idx, value);
+        iconv.conv2Db(stmt, idx, col, data);
       }
 
       // WHERE
@@ -1028,7 +1430,9 @@ public enum TeapotOrm {
         }
       }
 
+      time1 = System.currentTimeMillis();
       result += stmt.executeUpdate();
+      time2 = System.currentTimeMillis();
     } catch (SQLException ex) {
       conn.rollback();
       ex.printStackTrace();
@@ -1043,6 +1447,11 @@ public enum TeapotOrm {
         se.printStackTrace();
       } // do nothing
     } //end try
+    long endTime = System.currentTimeMillis();
+    System.out.println("sqlCmd=" + sqlCmd);
+    System.out.println("★★★★★update处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
     return result;
   }
 
@@ -1054,12 +1463,34 @@ public enum TeapotOrm {
    * @param <T> 实现接口IKeyValue的类。
    * @return 更新件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public <T extends IKeyValue> int update(String tableName, Condition condition, List<T> data)
       throws SQLException {
+    return this.update(tableName, condition, data, this.idefConv);
+  }
+  /**
+   * 向表中更新数据.
+   * @param tableName 表。
+   * @param condition 条件。
+   * @param data 更新数据。
+   * @param <T> 实现接口IKeyValue的类。
+   * @param iconv 变换处理
+   * @return 更新件数。
+   * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.2
+   */
+  public <T extends IKeyValue> int update(String tableName, Condition condition, List<T> data,
+      IConv iconv) throws SQLException {
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
     int result = 0;
     Connection conn = null;
     PreparedStatement stmt = null;
+
+    startTime = System.currentTimeMillis();
     StringBuffer buf = new StringBuffer();
     /* UPDATE */
     buf.append("UPDATE ");
@@ -1069,10 +1500,12 @@ public enum TeapotOrm {
     MdlTable tblInfo = getTable(tableName);
     System.out.println(tblInfo);
     int max = tblInfo.getColmuns().size();
-    for (int j = 0; j < max; j ++) {
-      buf.append(tblInfo.getColmuns().get(j).getColumnName());
+    int idj = 0;
+    while (idj < max) {
+      buf.append(tblInfo.getColmuns().get(idj).getColumnName());
       buf.append("= ? ");
-      if (j < (max - 1)) {
+      idj ++;
+      if (idj < max) {
         buf.append(", ");
       }
     }
@@ -1083,28 +1516,30 @@ public enum TeapotOrm {
     }
 
     String sqlCmd = buf.toString();
-    System.out.println("sqlCmd=" + sqlCmd);
-
     try {
       conn = TeapotDb.getInstance().getConnection();
       conn.setAutoCommit(false);
       stmt = conn.prepareStatement(sqlCmd);
 
-      for (IKeyValue dat : data) {
+      time3 = System.currentTimeMillis();
+      for (int idz = 0, maxSize = data.size(); idz < maxSize; idz ++) {
+        IKeyValue dat = data.get(idz);
         int idx = 0;
         // SET
+        stmt.setObject(max, null);
         for (int j = 0; j < max; j ++) {
           MdlColumn col = tblInfo.getColmuns().get(j);
-          Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
+//          Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
           idx ++;
-          stmt.setObject(idx, value);
+//          stmt.setObject(idx, value);
+          iconv.conv2Db(stmt, idx, col, dat);
         }
 
         // WHERE
         if (condition != null) {
           List<?> values = condition.getValues();
           System.out.println("条件字段的个数：" + values.size());
-          for (int j = 0; j < values.size(); j ++) {
+          for (int j = 0, maxLength = values.size(); j < maxLength; j ++) {
             Object value = (Object) values.get(j);
             idx ++;
             stmt.setObject(idx, value);
@@ -1112,8 +1547,9 @@ public enum TeapotOrm {
         }
         stmt.addBatch();
       } // for
+      time1 = System.currentTimeMillis();
       int[] irecs = stmt.executeBatch();
-
+      time2 = System.currentTimeMillis();
       conn.commit();
       for (int k : irecs) {
         result += k;
@@ -1139,6 +1575,11 @@ public enum TeapotOrm {
         se.printStackTrace();
       } // end finally try
     } //end try
+    long endTime = System.currentTimeMillis();
+    System.out.println("sqlCmd=" + sqlCmd);
+    System.out.println("★★★★★update处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
     return result;
   }
 
@@ -1150,12 +1591,35 @@ public enum TeapotOrm {
    * @param conn 数据库连接。
    * @param <T> 实现接口IKeyValue的类。
    * @return 更新件数。
-   * @throws SQLException 返回处理过程中的异常。
+   * @throws SQLException 返回处理过程中发生的异常。
+   * @since 0.0.1
    */
   public <T extends IKeyValue> int update(String tableName, Condition condition, List<T> data,
       Connection conn) throws SQLException {
+    return this.update(tableName, condition, data, conn, this.idefConv);
+  }
+  /**
+   * 向表中更新数据.
+   * @param tableName 表。
+   * @param condition 条件。
+   * @param data 更新数据。
+   * @param conn 数据库连接。
+   * @param <T> 实现接口IKeyValue的类。
+   * @param iconv 变换处理
+   * @return 更新件数。
+   * @throws SQLException 返回处理过程中发生的异常。
+   * @since 0.0.2
+   */
+  public <T extends IKeyValue> int update(String tableName, Condition condition, List<T> data,
+      Connection conn, IConv iconv) throws SQLException {
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long time3 = 0;
     int result = 0;
     PreparedStatement stmt = null;
+
+    startTime = System.currentTimeMillis();
     StringBuffer buf = new StringBuffer();
     /* UPDATE */
     buf.append("UPDATE ");
@@ -1165,10 +1629,12 @@ public enum TeapotOrm {
     MdlTable tblInfo = getTable(tableName);
     System.out.println(tblInfo);
     int max = tblInfo.getColmuns().size();
-    for (int j = 0; j < max; j ++) {
-      buf.append(tblInfo.getColmuns().get(j).getColumnName());
+    int idz = 0;
+    while (idz < max) {
+      buf.append(tblInfo.getColmuns().get(idz).getColumnName());
       buf.append("= ? ");
-      if (j < (max - 1)) {
+      idz ++;
+      if (idz < max) {
         buf.append(", ");
       }
     }
@@ -1184,21 +1650,25 @@ public enum TeapotOrm {
     try {
       stmt = conn.prepareStatement(sqlCmd);
 
-      for (IKeyValue dat : data) {
+      time3 = System.currentTimeMillis();
+      for (int ida = 0, maxSize = data.size(); ida < maxSize; ida ++) {
+        IKeyValue dat = data.get(ida);
         int idx = 0;
         // SET
+        stmt.setObject(max, null);
         for (int j = 0; j < max; j ++) {
           MdlColumn col = tblInfo.getColmuns().get(j);
-          Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
+//          Object value = dat.getValueByKey(col.getTableName() + "." + col.getColumnName());
           idx ++;
-          stmt.setObject(idx, value);
+//          stmt.setObject(idx, value);
+          iconv.conv2Db(stmt, idx, col, dat);
         }
 
         // WHERE
         if (condition != null) {
           List<?> values = condition.getValues();
-          System.out.println("条件字段的个数：" + values.size());
-          for (int j = 0; j < values.size(); j ++) {
+//          System.out.println("条件字段的个数：" + values.size());
+          for (int j = 0, maxLength = values.size(); j < maxLength; j ++) {
             Object value = (Object) values.get(j);
             idx ++;
             stmt.setObject(idx, value);
@@ -1206,8 +1676,9 @@ public enum TeapotOrm {
         }
         stmt.addBatch();
       } // for
+      time1 = System.currentTimeMillis();
       int[] irecs = stmt.executeBatch();
-
+      time2 = System.currentTimeMillis();
       for (int k : irecs) {
         result += k;
       }
@@ -1225,6 +1696,10 @@ public enum TeapotOrm {
         se.printStackTrace();
       } // do nothing
     } //end try
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★update处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒），addBatch耗时" + (time1 - time3) + "毫秒");
     return result;
   }
 
@@ -1234,36 +1709,19 @@ public enum TeapotOrm {
    * @param condition 数据。
    * @return 删除件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public int delete(String tableName, Condition condition) throws SQLException {
+    long startTime = 0;
     int result = 0;
     Connection conn = null;
-    PreparedStatement stmt = null;
-    StringBuffer buf = new StringBuffer();
-    /* DELETE FROM */
-    buf.append("DELETE FROM ");
-    buf.append(tableName);
-    /* WHERE */
-    if (condition != null) {
-      buf.append(condition);
-    }
 
-    String sqlCmd = buf.toString();
-    System.out.println("sqlCmd=" + sqlCmd);
+    startTime = System.currentTimeMillis();
     try {
       conn = TeapotDb.getInstance().getConnection();
       conn.setAutoCommit(false);
-      stmt = conn.prepareStatement(sqlCmd);
 
-      if (condition != null) {
-        List<?> values = condition.getValues();
-        System.out.println("条件字段的个数：" + values.size());
-        for (int i = 0; i < values.size(); i ++) {
-          Object value = (Object) values.get(i);
-          stmt.setObject((i + 1), value);
-        }
-      }
-      result = stmt.executeUpdate();
+      result = delete(tableName, condition, conn);
 
       conn.commit();
     } catch (SQLException ex) {
@@ -1272,13 +1730,7 @@ public enum TeapotOrm {
       throw ex;
     } finally {
       //finally block used to close resources
-      try {
-        if (stmt != null) {
-          stmt.close();
-        }
-      } catch (SQLException se) {
-        se.printStackTrace();
-      } // do nothing
+
       try {
         if (conn != null) {
           TeapotDb.getInstance().releaseConnection(conn);
@@ -1287,6 +1739,9 @@ public enum TeapotOrm {
         se.printStackTrace();
       } // end finally try
     } //end try
+    long endTime = System.currentTimeMillis();
+    System.out.println("★★★★★delete处理耗时" + (endTime - startTime) + "毫秒。");
+    /* SQL准备(31ms)=获取连接(15ms)+PreparedStatement(16ms) */
     return result;
   }
 
@@ -1297,10 +1752,16 @@ public enum TeapotOrm {
    * @param conn 数据库连接。
    * @return 删除件数。
    * @throws SQLException 返回处理过程中的异常。
+   * @since 0.0.1
    */
   public int delete(String tableName, Condition condition, Connection conn) throws SQLException {
+    long startTime = 0;
+    long time1 = 0;
+    long time2 = 0;
     int result = 0;
     PreparedStatement stmt = null;
+
+    startTime = System.currentTimeMillis();
     StringBuffer buf = new StringBuffer();
     /* DELETE FROM */
     buf.append("DELETE FROM ");
@@ -1311,19 +1772,24 @@ public enum TeapotOrm {
     }
 
     String sqlCmd = buf.toString();
-    System.out.println("sqlCmd=" + sqlCmd);
     try {
       stmt = conn.prepareStatement(sqlCmd);
 
       if (condition != null) {
         List<?> values = condition.getValues();
         System.out.println("条件字段的个数：" + values.size());
-        for (int i = 0; i < values.size(); i ++) {
-          Object value = (Object) values.get(i);
-          stmt.setObject((i + 1), value);
+        int idx = 0;
+        int maxSize = values.size();
+        stmt.setObject(maxSize, null);
+        while (idx < maxSize) {
+          Object value = (Object) values.get(idx);
+          idx ++;
+          stmt.setObject(idx, value);
         }
       }
+      time1 = System.currentTimeMillis();
       result = stmt.executeUpdate();
+      time2 = System.currentTimeMillis();
     } catch (SQLException ex) {
       conn.rollback();
       ex.printStackTrace();
@@ -1338,6 +1804,11 @@ public enum TeapotOrm {
         se.printStackTrace();
       } // do nothing
     } //end try
+    long endTime = System.currentTimeMillis();
+    System.out.println("sqlCmd=" + sqlCmd);
+    System.out.println("★★★★★delete处理耗时" + (endTime - startTime) + "毫秒。(其中：SQL准备："
+        + (time1 - startTime) + "毫秒，SQL执行：" + (time2 - time1) + "毫秒，SQL执行后："
+        + (endTime - time2) + "毫秒）");
     return result;
   }
 }

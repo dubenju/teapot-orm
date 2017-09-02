@@ -209,7 +209,7 @@ public class MdlColumn implements Serializable, IKeyValue {
     this.tableName = value;
   }
   /**
-   * 返回属性columnName的值.
+   * 返回字段名称.
    * @return columnName的值。
    */
   public java.lang.String getColumnName() {
@@ -546,7 +546,7 @@ public class MdlColumn implements Serializable, IKeyValue {
     buf.append(this.getDecimalDigits());
     buf.append(",");
     buf.append(this.getNumPrecRadix());
-    buf.append(",");
+    buf.append(",Nullable=");
     buf.append(this.getNullable());
     buf.append(",");
     buf.append(this.getRemarks());
@@ -560,7 +560,7 @@ public class MdlColumn implements Serializable, IKeyValue {
     buf.append(this.getCharOctetLength());
     buf.append(",");
     buf.append(this.getOrdinalPosition());
-    buf.append(",");
+    buf.append(",IsNullable=");
     buf.append(this.getIsNullable());
     buf.append(",");
     buf.append(this.getScopeCatalog());
@@ -584,7 +584,7 @@ public class MdlColumn implements Serializable, IKeyValue {
    * @return Object 对应键名值。
    */
   @Override
-  public Object getValueByKey(String key) {
+  public Object get(String key) {
     Object ret = null;
     if (MdlColumn.TABLE_CAT.equals(key)) {
       ret = this.getTableCat();
@@ -671,7 +671,7 @@ public class MdlColumn implements Serializable, IKeyValue {
    * @param value 对应键名值。
    */
   @Override
-  public void setValueByKey(String key, Object value) {
+  public IKeyValue set(String key, Object value) {
     if (MdlColumn.TABLE_CAT.equals(key)) {
       this.setTableCat((java.lang.String) value);
     }
@@ -747,5 +747,6 @@ public class MdlColumn implements Serializable, IKeyValue {
     if (MdlColumn.IS_GENERATEDCOLUMN.equals(key)) {
       this.setIsGeneratedcolumn((java.lang.String) value);
     }
+    return this;
   }
 }

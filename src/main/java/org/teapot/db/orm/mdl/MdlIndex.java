@@ -344,7 +344,7 @@ public class MdlIndex implements Serializable, IKeyValue {
    * @return Object 对应键名值。
    */
   @Override
-  public Object getValueByKey(String key) {
+  public Object get(String key) {
     Object ret = null;
     if (MdlIndex.TABLE_CAT.equals(key)) {
       ret = this.getTableCat();
@@ -395,7 +395,7 @@ public class MdlIndex implements Serializable, IKeyValue {
    * @param value 对应键名值。
    */
   @Override
-  public void setValueByKey(String key, Object value) {
+  public IKeyValue set(String key, Object value) {
     if (MdlIndex.TABLE_CAT.equals(key)) {
       this.setTableCat((java.lang.String) value);
     }
@@ -435,5 +435,6 @@ public class MdlIndex implements Serializable, IKeyValue {
     if (MdlIndex.FILTER_CONDITION.equals(key)) {
       this.setFilterCondition((java.lang.String) value);
     }
+    return this;
   }
 }

@@ -21,6 +21,7 @@ import org.teapot.db.orm.util.UModelConstant;
 /**
  * 数据库SQL排序类。
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public class OptOrder {
   private String cloumn;
@@ -29,6 +30,7 @@ public class OptOrder {
   /**
    * 构造函数.
    * @param col 字段。
+   * @since 0.0.1
    */
   public OptOrder(String col) {
     this.cloumn = col;
@@ -39,6 +41,7 @@ public class OptOrder {
    * 构造函数.
    * @param col 字段。
    * @param orde 排序。
+   * @since 0.0.1
    */
   public OptOrder(String col, int orde) {
     this.cloumn = col;
@@ -48,6 +51,7 @@ public class OptOrder {
   /**
    * 获取字段.
    * @return cloumn 字段。
+   * @since 0.0.1
    */
   public String getCloumn() {
     return cloumn;
@@ -56,6 +60,7 @@ public class OptOrder {
   /**
    * 设置字段.
    * @param cloumn 字段。
+   * @since 0.0.1
    */
   public void setCloumn(String cloumn) {
     this.cloumn = cloumn;
@@ -64,6 +69,7 @@ public class OptOrder {
   /**
    * 获取排序.
    * @return order 排序。
+   * @since 0.0.1
    */
   public int getOrder() {
     return order;
@@ -72,8 +78,23 @@ public class OptOrder {
   /**
    * 设置排序.
    * @param order 排序。
+   * @since 0.0.1
    */
   public void setOrder(int order) {
     this.order = order;
+  }
+
+  /**
+   * 返回OptOrder的字符串表示形式.
+   * @return String 字符串表示形式。
+   * @since 0.0.2
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    StringBuffer buf = new StringBuffer();
+    buf.append(this.getCloumn());
+    buf.append(this.order == UModelConstant.SORT_ASC ? "升序" : "降序");
+    return buf.toString();
   }
 }

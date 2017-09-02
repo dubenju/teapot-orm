@@ -19,6 +19,7 @@ package org.teapot.db.orm;
 /**
  * 字符串格式化类。
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public enum Formatter {
   INSTANCE;
@@ -28,6 +29,7 @@ public enum Formatter {
    * 第一个单字以小写字母开始；第二个单字的首字母大写，例如：firstName、lastName。
    * @param str 要格式化的字符串
    * @return 格式化后的结果
+   * @since 0.0.1
    */
   public String fmtVar(String str) {
     if (str == null) {
@@ -53,13 +55,15 @@ public enum Formatter {
    * 每一个单字的首字母都采用大写字母，例如：FirstName、LastName、CamelCase，也被称为Pascal命名法。
    * @param str 要格式化的字符串
    * @return 格式化后的结果
+   * @since 0.0.1
    */
   public String fmtFun(String str) {
     if (str == null) {
       return str;
     }
-    String[] aryu = str.toUpperCase().split("_");
-    String[] aryl = str.toLowerCase().split("_");
+    String str2 = str.replaceAll("\\.", "_");
+    String[] aryu = str2.toUpperCase().split("_");
+    String[] aryl = str2.toLowerCase().split("_");
     StringBuffer buf = new StringBuffer();
     for (int idx = 0; idx < aryu.length; idx ++) {
       if (aryu[idx].length() > 0) {
@@ -77,6 +81,7 @@ public enum Formatter {
    * @param ch 填充位的字符串
    * @param len 格式化后的字符串长度
    * @return 格式化后的结果
+   * @since 0.0.1
    */
   public String fmt(String in, String ch, int len) {
     if (ch == null || ch.length() <= 0) {
@@ -104,6 +109,7 @@ public enum Formatter {
    * 把字符串格式化成大写的.
    * @param str 要格式化的字符串
    * @return 格式化后的结果
+   * @since 0.0.1
    */
   public String upper(String str) {
     if (str == null) {
@@ -116,6 +122,7 @@ public enum Formatter {
    * 把字符串格式化成小写的.
    * @param str 要格式化的字符串
    * @return 格式化后的结果
+   * @since 0.0.1
    */
   public String lower(String str) {
     if (str == null) {

@@ -55,8 +55,8 @@ public class DefaultComparator<T> implements Comparator<T> {
 
     for (int i = 0; i < this.sortKeys.size(); i ++) {
       @SuppressWarnings("rawtypes")
-      Comparable v1 = (Comparable<?>) k1.getValueByKey(this.sortKeys.get(i).getCloumn());
-      Comparable<?> v2 = (Comparable<?>) k2.getValueByKey(this.sortKeys.get(i).getCloumn());
+      Comparable v1 = (Comparable<?>) k1.get(this.sortKeys.get(i).getCloumn());
+      Comparable<?> v2 = (Comparable<?>) k2.get(this.sortKeys.get(i).getCloumn());
       comp = v1.compareTo( v2 );
       if (comp != 0) {
         return comp * this.sortKeys.get(i).getOrder();

@@ -19,14 +19,8 @@ package org.teapot.db.orm;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.teapot.db.orm.mdl.MdlColumn;
 import org.teapot.db.orm.mdl.MdlTable;
-import org.teapot.db.TeapotDb;
-import org.teapot.db.TypeJavaDb;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.teapot.db.orm.util.UTeapot;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -35,85 +29,116 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 /**
  * 对象关系映射代码及测试代码的自动生成类。
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public class TeapotOrmGen {
 
   /**
    * 自动生成的入口方法.
    * @param args 参数 不需要指定。
+   * @since 0.0.1
    */
   public static void main(String[] args) {
-    String path = TeapotOrmGen.class.getResource("").getPath();
+    /*
+     * @since 0.0.2
+     * 2017/08/15
+     * 由于在ant执行时发生了路径错误，改由参数传入。
+     * 在参数没有指定的时候，才使用默认的这个。
+     * [java] java.io.FileNotFoundException:
+     * file:\D:\git\teapot-orm\lib\teapot-orm-0.0.2.jar!\org\teapot\db\orm\
+     * ..\..\..\..\..\conf\Teapot_ORM.properties
+     */
+    String path = UTeapot.getPath(TeapotOrmGen.class);
+
+    // TODO:999.从参数传入时的考虑。
+    String propFile = path + "../../../../../conf/Teapot_ORM.properties";
+//    if (args.length > 0) {
+//      propFile = args[0];
+//    }
+    System.out.println("使用的Properties File是:" + propFile);
+
+    // 取得的数据应该共享，以减少IO。
     Properties prop = new Properties();//属性集合对象
     // 当前目录>conf>class
     try {
-    //属性文件流
-      FileInputStream fis = new FileInputStream(path + "../../../../../conf/Teapot_ORM.properties");
-      prop.load(fis);//将属性文件流装载到Properties对象中
-      fis.close();// 关闭流
+      // 属性文件流
+      FileInputStream fis = new FileInputStream(propFile);
+      // 将属性文件流装载到Properties对象中
+      prop.load(fis);
+      // 关闭流
+      fis.close();
     } catch (IOException ex) {
       ex.printStackTrace();
     }
 
-    String inputType = prop.getProperty("teapot.orm.generate.from");
-    String xmlFile = prop.getProperty("teapot.orm.generate.xmlfile");
-    String outputDir = prop.getProperty("teapot.orm.generate.outputdir");
+    String inputType     = prop.getProperty("teapot.orm.generate.from");
+    String xmlFile       = prop.getProperty("teapot.orm.generate.xmlfile");
+    String outputDir     = prop.getProperty("teapot.orm.generate.outputdir");
     String outputTestDir = prop.getProperty("teapot.orm.generate.test.outputdir");
-    String strPackage = prop.getProperty("teapot.orm.generate.package");
-    String stTable = prop.getProperty("teapot.orm.generate.table");
+    String strPackage    = prop.getProperty("teapot.orm.generate.package");
+    String stTable       = prop.getProperty("teapot.orm.generate.table");
 
     System.out.println("teapot.orm.generate.from=" + inputType);
     System.out.println("teapot.orm.generate.xmlfile=" + xmlFile);
     System.out.println("teapot.orm.generate.outputdir=" + outputDir);
-    // System.out.println("teapot.orm.generate.outputdir=" + outputDir);
     System.out.println("teapot.orm.generate.test.outputdir=" + outputTestDir);
     System.out.println("teapot.orm.generate.package=" + strPackage);
     System.out.println("teapot.orm.generate.table=" + stTable);
 
+    // TODO:999.从参数传入时的考虑。
     String outputPath = outputDir + "/" + strPackage.replaceAll("\\.", "/") + "/";
     if (".".equals(outputDir.substring(0,  1))) {
       outputPath = path + "../../../../../" + outputPath;
     }
-    System.out.println("outputPath=" + outputPath);
     String outputTestPath = outputTestDir + "/" + strPackage.replaceAll("\\.", "/") + "/";
     if (".".equals(outputTestDir.substring(0,  1))) {
       outputTestPath = path + "../../../../../" + outputTestPath;
     }
+    System.out.println("outputPath=" + outputPath);
     System.out.println("outputTestPath=" + outputTestPath);
+    File srcPath = new File(outputPath);
+    File tstPath = new File(outputTestPath);
+    if (srcPath.exists() == false) {
+      srcPath.mkdirs();
+    }
+    if (tstPath.exists() == false) {
+      tstPath.mkdirs();
+    }
 
-    /*
+    /* *************************************************************
      * Get List
-     */
+     * *************************************************************/
     List<MdlTable> list = null;
     HashMap<String, MdlTable> map = new HashMap<String, MdlTable>();
-    if ("database".equals(inputType)) {
-      list = TeapotOrm.INSTANCE.getTableInfo();
-    }
+//    if ("database".equals(inputType)) {
+//      // TODO:999.从参数传入时的考虑。
+//      list = TeapotOrm.INSTANCE.getTableInfo();
+//    }
     if ("xml".equals(inputType)) {
+      // TODO:999.从参数传入时的考虑。
       String xmlFullPath = xmlFile;
       if (".".equals(xmlFullPath.substring(0,  1))) {
         xmlFullPath = path + "../../../../../" + xmlFile;
       }
-      list = readXmlFile(xmlFullPath);
+      list = TeapotOrmXml.readXmlFile(xmlFullPath);
       for (MdlTable mtb : list) {
         map.put(mtb.getTableName().toUpperCase(), mtb);
       }
     }
-    System.out.println(list.size());
+    System.out.println(list != null ? list.size() : 0);
 
+    /* *************************************************************
+     * Set Velocity
+     * *************************************************************/
+    // TODO:999.从参数传入时的考虑。
     Velocity.setProperty("file.resource.loader.path", path + "../../../../../templates");
     Velocity.init();
     VelocityContext context = new VelocityContext();
@@ -121,6 +146,9 @@ public class TeapotOrmGen {
     context.put("fmtter", fmt);
     context.put("pkg", strPackage);
 
+    /* *************************************************************
+     * Write By Table
+     * *************************************************************/
     String[] tables = stTable.split(",");
     for (String strTable : tables) {
       MdlTable tbl = null;
@@ -133,6 +161,11 @@ public class TeapotOrmGen {
       if (tbl == null) {
         System.out.println("[ERROR!]PLEASE CHECK YOUR TABLE ID IN THE MAP UNDER UPPER["
             + strTable + "].");
+        /*
+         * 2017/08/15
+         * 为了能在ant判断出失败，追加了状态值的处理。
+         */
+        System.exit(1);
         return ;
       }
 
@@ -178,63 +211,7 @@ public class TeapotOrmGen {
         e.printStackTrace();
       }
     } // for
+
     System.out.println("自动生成处理结束。");
-  }
-
-  /**
-   * 通过XML读取表信息.
-   * @param fileName XML
-   * @return 表信息
-   */
-  public static List<MdlTable> readXmlFile(String fileName) {
-    DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-    Document document = null;
-    try {
-      //DOM parser instance
-      DocumentBuilder builder = builderFactory.newDocumentBuilder();
-      //parse an XML file into a DOM tree
-      document = builder.parse(new File(fileName));
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();
-    } catch (SAXException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    //get root element
-    Element rootElement = document.getDocumentElement();
-
-    List<MdlTable> result = new ArrayList<MdlTable>();
-    NodeList nodeList = rootElement.getElementsByTagName("table");
-    if (nodeList != null) {
-      for (int i = 0 ; i < nodeList.getLength(); i ++)  {
-        Element element = (Element)nodeList.item(i);
-        String name = element.getAttribute("name");
-        String type = element.getAttribute("type");
-        System.out.println(name + "," + type);
-        MdlTable mdlTable = new MdlTable();
-        mdlTable.setTableName(name.toUpperCase());
-        ArrayList<MdlColumn> colmuns = new ArrayList<MdlColumn>();
-        NodeList subNodeList = element.getElementsByTagName("column");
-        if (subNodeList != null) {
-          for (int j = 0 ; j < subNodeList.getLength(); j ++)  {
-            Element elem = (Element)subNodeList.item(j);
-            String columnName = elem.getAttribute("name");
-            String typeName = elem.getAttribute("type");
-            System.out.println(columnName + "," + typeName);
-            MdlColumn col = new MdlColumn();
-            col.setColumnName(columnName);
-            col.setTypeName(typeName);
-            col.setTypeNameJava(
-                TypeJavaDb.getTypeJava(TeapotDb.getInstance().getDbType()).getJavaType(typeName));
-            colmuns.add(col);
-          }
-        }
-        mdlTable.setColmuns(colmuns);
-        result.add(mdlTable);
-      }
-    }
-    return result;
   }
 }

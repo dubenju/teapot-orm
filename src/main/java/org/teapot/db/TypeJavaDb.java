@@ -22,6 +22,7 @@ import java.util.Map;
 /**
  * 从SQL到Java数据类型映射的类。
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public class TypeJavaDb {
 
@@ -33,6 +34,7 @@ public class TypeJavaDb {
   /**
    * 获取实例.
    * @return 实例
+   * @since 0.0.1
    */
   public static TypeJavaDb getInstance() {
     if (TypeJavaDb.INSTANCE == null) {
@@ -61,6 +63,7 @@ public class TypeJavaDb {
    * 通过数据库类型获取从SQL到Java数据类型的映射类.
    * @param type 数据库类型。
    * @return 从SQL到Java数据类型的映射类。
+   * @since 0.0.1
    */
   public static TypeJavaDb getTypeJava(String type) {
     TypeJavaDb typeJavaDb = TypeJavaDb.getInstance().typeDb.get(type);
@@ -73,6 +76,7 @@ public class TypeJavaDb {
 
   /**
    * 构造函数.
+   * @since 0.0.1
    */
   protected TypeJavaDb() {
     super();
@@ -82,6 +86,7 @@ public class TypeJavaDb {
    * 通过数据库类型名称返回Java类型名称.
    * @param typeName 数据库类型名称。
    * @return Java类型名称。
+   * @since 0.0.1
    */
   public String getJavaType(String typeName) {
     if (this.typeNameJava.size() <= 0) {
@@ -96,6 +101,7 @@ public class TypeJavaDb {
 
   /**
    * 设置从SQL到Java数据类型的映射.
+   * @since 0.0.1
    */
   protected void setup() {
     setType("TINYINT", "java.lang.Integer");
@@ -135,6 +141,7 @@ public class TypeJavaDb {
    * 设置从SQL到Java数据类型的映射的方法.
    * @param dbType 数据库类型名称。
    * @param javaClass Java类型名称。
+   * @since 0.0.1
    */
   public void setType(String dbType, String javaClass) {
     this.typeNameJava.put(dbType, javaClass);

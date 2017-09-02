@@ -16,6 +16,7 @@
 
 package org.teapot.db.orm.mdl;
 
+import org.teapot.db.orm.Formatter;
 import org.teapot.db.orm.IKeyValue;
 
 import java.io.Serializable;
@@ -23,9 +24,10 @@ import java.io.Serializable;
 /**
  * 表tbl_test的JavaBean类.
  * @author dubenju@126.com
- *     这份代码最初是由TeapotOrmGen于2017/08/13 13:22:06.417 +0900自动生成的。
+ *     这份代码最初是由TeapotOrmGen于2017/08/31 07:28:23.214 +0900自动生成的。
  */
-public class MdlTblTest implements Serializable, IKeyValue {
+public class MdlTblTest
+    implements Serializable, IKeyValue, Comparable<MdlTblTest> {
 
   private static final long serialVersionUID = 1L;
   /*
@@ -436,69 +438,128 @@ public class MdlTblTest implements Serializable, IKeyValue {
     buf.append(",");
     buf.append(this.getUpdateScreenId());
 
+    buf.append(",");
+    buf.append(this.getClass().getName());
     return buf.toString();
   }
 
   /**
    * 通过键名获取值.
+   *
+   * <p>
+   * 注意：对于参数名称要使用常量.
    * 当指定的键名不存在的时候，返回null。
    * @return Object 对应键名值。
    */
   @Override
-  public Object getValueByKey(String key) {
+  public Object get(String key) {
     Object ret = null;
     if (MdlTblTest.TEST_ID.equals(key)) {
+      ret = this.getTestId();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_ID).equals(key)) {
       ret = this.getTestId();
     }
     if (MdlTblTest.TEST_NAME.equals(key)) {
       ret = this.getTestName();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_NAME).equals(key)) {
+      ret = this.getTestName();
+    }
     if (MdlTblTest.TEST_BIT.equals(key)) {
+      ret = this.getTestBit();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_BIT).equals(key)) {
       ret = this.getTestBit();
     }
     if (MdlTblTest.TEST_BLOB.equals(key)) {
       ret = this.getTestBlob();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_BLOB).equals(key)) {
+      ret = this.getTestBlob();
+    }
     if (MdlTblTest.TEST_DOUBLE.equals(key)) {
+      ret = this.getTestDouble();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_DOUBLE).equals(key)) {
       ret = this.getTestDouble();
     }
     if (MdlTblTest.TEST_FLOAT.equals(key)) {
       ret = this.getTestFloat();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_FLOAT).equals(key)) {
+      ret = this.getTestFloat();
+    }
     if (MdlTblTest.TEST_TINYINT.equals(key)) {
+      ret = this.getTestTinyint();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_TINYINT).equals(key)) {
       ret = this.getTestTinyint();
     }
     if (MdlTblTest.TEST_INT.equals(key)) {
       ret = this.getTestInt();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_INT).equals(key)) {
+      ret = this.getTestInt();
+    }
     if (MdlTblTest.TEST_DECIMAL.equals(key)) {
+      ret = this.getTestDecimal();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_DECIMAL).equals(key)) {
       ret = this.getTestDecimal();
     }
     if (MdlTblTest.TEST_BIGINT.equals(key)) {
       ret = this.getTestBigint();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_BIGINT).equals(key)) {
+      ret = this.getTestBigint();
+    }
     if (MdlTblTest.TEST_DATETIME.equals(key)) {
+      ret = this.getTestDatetime();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_DATETIME).equals(key)) {
       ret = this.getTestDatetime();
     }
     if (MdlTblTest.TEST_ORDER.equals(key)) {
       ret = this.getTestOrder();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.TEST_ORDER).equals(key)) {
+      ret = this.getTestOrder();
+    }
     if (MdlTblTest.CREATE_DATE.equals(key)) {
+      ret = this.getCreateDate();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.CREATE_DATE).equals(key)) {
       ret = this.getCreateDate();
     }
     if (MdlTblTest.CREATE_TIME.equals(key)) {
       ret = this.getCreateTime();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.CREATE_TIME).equals(key)) {
+      ret = this.getCreateTime();
+    }
     if (MdlTblTest.UPDATE_DATE.equals(key)) {
+      ret = this.getUpdateDate();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.UPDATE_DATE).equals(key)) {
       ret = this.getUpdateDate();
     }
     if (MdlTblTest.UPDATE_TIME.equals(key)) {
       ret = this.getUpdateTime();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.UPDATE_TIME).equals(key)) {
+      ret = this.getUpdateTime();
+    }
     if (MdlTblTest.UPDATE_USER_ID.equals(key)) {
       ret = this.getUpdateUserId();
     }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.UPDATE_USER_ID).equals(key)) {
+      ret = this.getUpdateUserId();
+    }
     if (MdlTblTest.UPDATE_SCREEN_ID.equals(key)) {
+      ret = this.getUpdateScreenId();
+    }
+    if (Formatter.INSTANCE.fmtFun(MdlTblTest.UPDATE_SCREEN_ID).equals(key)) {
       ret = this.getUpdateScreenId();
     }
     return ret;
@@ -506,12 +567,15 @@ public class MdlTblTest implements Serializable, IKeyValue {
 
   /**
    * 通过键名设置值.
+   *
+   * <p>
+   * 注意：对于参数名称要使用常量.
    * 当指定的键名不存在的时候，不作任何改动。
    * @param key 键名。
    * @param value 对应键名值。
    */
   @Override
-  public void setValueByKey(String key, Object value) {
+  public IKeyValue set(String key, Object value) {
     if (MdlTblTest.TEST_ID.equals(key)) {
       this.setTestId((java.lang.String) value);
     }
@@ -566,5 +630,59 @@ public class MdlTblTest implements Serializable, IKeyValue {
     if (MdlTblTest.UPDATE_SCREEN_ID.equals(key)) {
       this.setUpdateScreenId((java.lang.String) value);
     }
+    return this;
+  }
+
+  /**
+   * 比较两个对象是否相等.
+   * @param   anObject   the reference object with which to compare.
+   * @return  {@code true} if this object is the same as the obj
+   *          argument; {@code false} otherwise.
+   */
+  @Override
+  public boolean equals(Object anObject) {
+    if (this == anObject) {
+      return true;
+    }
+    if (anObject instanceof MdlTblTest) {
+      return this.compareTo((MdlTblTest) anObject) == 0;
+    }
+    return super.equals(anObject);
+  }
+
+  /**
+   * 比较大小.
+   * @param anotherMdlTblTest   the {@code MdlTblTest} to be compared.
+   * @return  the value {@code 0} if the argument MdlTblTest is equal to
+   *          this MdlTblTest; a value less than {@code 0} if this MdlTblTest
+   *          is lexicographically less than the MdlTblTest argument; and a
+   *          value greater than {@code 0} if this MdlTblTest is
+   *          lexicographically greater than the MdlTblTest argument.
+   */
+  @Override
+  public int compareTo(MdlTblTest anotherMdlTblTest) {
+    int result = 0;
+    if (anotherMdlTblTest == null) {
+      result = 1;
+      return result;
+    }
+    if (this.getTestId() == null) {
+      if (anotherMdlTblTest.getTestId() != null) {
+        result = -1;
+        return result;
+      }
+    }
+    if (this.getTestId() != null) {
+      if (anotherMdlTblTest.getTestId() == null) {
+        result = 1;
+        return result;
+      }
+    }
+    result = this.getTestId().compareTo(anotherMdlTblTest.getTestId());
+    if (result != 0) {
+      return result;
+    }
+
+    return result;
   }
 }

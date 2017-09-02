@@ -19,16 +19,19 @@ package org.teapot.db;
 /**
  * 从SQL到Java数据类型映射的Sqlite个别指定类。
  * @author dubenju@126.com
+ * @since 0.0.1
  */
 public class TypeJavaXml extends TypeJavaDb {
   /**
    * 构造函数.
+   * @since 0.0.1
    */
   protected TypeJavaXml() {
   }
 
   /**
    * 设置从SQL到Java数据类型的Sqlite个别映射.
+   * @since 0.0.1
    */
   @Override
   protected void setup() {

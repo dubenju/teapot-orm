@@ -2400,7 +2400,7 @@ public class MdlColumnTest {
    * 通过键名获取值的测试方法.
    */
   @Test
-  public void testGetValueByKey() {
+  public void testGet() {
     MdlColumn mdl = new MdlColumn();
     java.lang.String tableCat = new java.lang.String("tableCat");
     mdl.setTableCat(tableCat);
@@ -2454,165 +2454,164 @@ public class MdlColumnTest {
     mdl.setIsGeneratedcolumn(isGeneratedcolumn);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey(MdlColumn.TABLE_CAT));
+        mdl.get(MdlColumn.TABLE_CAT));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey(MdlColumn.TABLE_SCHEM));
+        mdl.get(MdlColumn.TABLE_SCHEM));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey(MdlColumn.TABLE_NAME));
+        mdl.get(MdlColumn.TABLE_NAME));
     Assert.assertEquals(mdl.getColumnName(),
-        mdl.getValueByKey(MdlColumn.COLUMN_NAME));
+        mdl.get(MdlColumn.COLUMN_NAME));
     Assert.assertEquals(mdl.getDataType(),
-        mdl.getValueByKey(MdlColumn.DATA_TYPE));
+        mdl.get(MdlColumn.DATA_TYPE));
     Assert.assertEquals(mdl.getTypeName(),
-        mdl.getValueByKey(MdlColumn.TYPE_NAME));
+        mdl.get(MdlColumn.TYPE_NAME));
     Assert.assertEquals(mdl.getTypeNameJava(),
-        mdl.getValueByKey(MdlColumn.TYPE_NAME_JAVA));
+        mdl.get(MdlColumn.TYPE_NAME_JAVA));
     Assert.assertEquals(mdl.getColumnSize(),
-        mdl.getValueByKey(MdlColumn.COLUMN_SIZE));
+        mdl.get(MdlColumn.COLUMN_SIZE));
     Assert.assertEquals(mdl.getBufferLength(),
-        mdl.getValueByKey(MdlColumn.BUFFER_LENGTH));
+        mdl.get(MdlColumn.BUFFER_LENGTH));
     Assert.assertEquals(mdl.getDecimalDigits(),
-        mdl.getValueByKey(MdlColumn.DECIMAL_DIGITS));
+        mdl.get(MdlColumn.DECIMAL_DIGITS));
     Assert.assertEquals(mdl.getNumPrecRadix(),
-        mdl.getValueByKey(MdlColumn.NUM_PREC_RADIX));
+        mdl.get(MdlColumn.NUM_PREC_RADIX));
     Assert.assertEquals(mdl.getNullable(),
-        mdl.getValueByKey(MdlColumn.NULLABLE));
+        mdl.get(MdlColumn.NULLABLE));
     Assert.assertEquals(mdl.getRemarks(),
-        mdl.getValueByKey(MdlColumn.REMARKS));
+        mdl.get(MdlColumn.REMARKS));
     Assert.assertEquals(mdl.getColumnDef(),
-        mdl.getValueByKey(MdlColumn.COLUMN_DEF));
+        mdl.get(MdlColumn.COLUMN_DEF));
     Assert.assertEquals(mdl.getSqlDataType(),
-        mdl.getValueByKey(MdlColumn.SQL_DATA_TYPE));
+        mdl.get(MdlColumn.SQL_DATA_TYPE));
     Assert.assertEquals(mdl.getSqlDatetimeSub(),
-        mdl.getValueByKey(MdlColumn.SQL_DATETIME_SUB));
+        mdl.get(MdlColumn.SQL_DATETIME_SUB));
     Assert.assertEquals(mdl.getCharOctetLength(),
-        mdl.getValueByKey(MdlColumn.CHAR_OCTET_LENGTH));
+        mdl.get(MdlColumn.CHAR_OCTET_LENGTH));
     Assert.assertEquals(mdl.getOrdinalPosition(),
-        mdl.getValueByKey(MdlColumn.ORDINAL_POSITION));
+        mdl.get(MdlColumn.ORDINAL_POSITION));
     Assert.assertEquals(mdl.getIsNullable(),
-        mdl.getValueByKey(MdlColumn.IS_NULLABLE));
+        mdl.get(MdlColumn.IS_NULLABLE));
     Assert.assertEquals(mdl.getScopeCatalog(),
-        mdl.getValueByKey(MdlColumn.SCOPE_CATALOG));
+        mdl.get(MdlColumn.SCOPE_CATALOG));
     Assert.assertEquals(mdl.getScopeSchema(),
-        mdl.getValueByKey(MdlColumn.SCOPE_SCHEMA));
+        mdl.get(MdlColumn.SCOPE_SCHEMA));
     Assert.assertEquals(mdl.getScopeTable(),
-        mdl.getValueByKey(MdlColumn.SCOPE_TABLE));
+        mdl.get(MdlColumn.SCOPE_TABLE));
     Assert.assertEquals(mdl.getSourceDataType(),
-        mdl.getValueByKey(MdlColumn.SOURCE_DATA_TYPE));
+        mdl.get(MdlColumn.SOURCE_DATA_TYPE));
     Assert.assertEquals(mdl.getIsAutoincrement(),
-        mdl.getValueByKey(MdlColumn.IS_AUTOINCREMENT));
+        mdl.get(MdlColumn.IS_AUTOINCREMENT));
     Assert.assertEquals(mdl.getIsGeneratedcolumn(),
-        mdl.getValueByKey(MdlColumn.IS_GENERATEDCOLUMN));
+        mdl.get(MdlColumn.IS_GENERATEDCOLUMN));
 
   }
   /**
    * 通过键名设置值的测试方法.
    */
   @Test
-  public void testSetValueByKey() {
+  public void testSet() {
     MdlColumn mdl = new MdlColumn();
     java.lang.String tableCat = new java.lang.String("tableCat");
-    mdl.setValueByKey(MdlColumn.TABLE_CAT, tableCat);
+    mdl.set(MdlColumn.TABLE_CAT, tableCat);
     java.lang.String tableSchem = new java.lang.String("tableSchem");
-    mdl.setValueByKey(MdlColumn.TABLE_SCHEM, tableSchem);
+    mdl.set(MdlColumn.TABLE_SCHEM, tableSchem);
     java.lang.String tableName = new java.lang.String("tableName");
-    mdl.setValueByKey(MdlColumn.TABLE_NAME, tableName);
+    mdl.set(MdlColumn.TABLE_NAME, tableName);
     java.lang.String columnName = new java.lang.String("columnName");
-    mdl.setValueByKey(MdlColumn.COLUMN_NAME, columnName);
+    mdl.set(MdlColumn.COLUMN_NAME, columnName);
     java.lang.String dataType = new java.lang.String("dataType");
-    mdl.setValueByKey(MdlColumn.DATA_TYPE, dataType);
+    mdl.set(MdlColumn.DATA_TYPE, dataType);
     java.lang.String typeName = new java.lang.String("typeName");
-    mdl.setValueByKey(MdlColumn.TYPE_NAME, typeName);
+    mdl.set(MdlColumn.TYPE_NAME, typeName);
     java.lang.String typeNameJava = new java.lang.String("typeNameJava");
-    mdl.setValueByKey(MdlColumn.TYPE_NAME_JAVA, typeNameJava);
+    mdl.set(MdlColumn.TYPE_NAME_JAVA, typeNameJava);
     java.lang.String columnSize = new java.lang.String("columnSize");
-    mdl.setValueByKey(MdlColumn.COLUMN_SIZE, columnSize);
+    mdl.set(MdlColumn.COLUMN_SIZE, columnSize);
     java.lang.String bufferLength = new java.lang.String("bufferLength");
-    mdl.setValueByKey(MdlColumn.BUFFER_LENGTH, bufferLength);
+    mdl.set(MdlColumn.BUFFER_LENGTH, bufferLength);
     java.lang.String decimalDigits = new java.lang.String("decimalDigits");
-    mdl.setValueByKey(MdlColumn.DECIMAL_DIGITS, decimalDigits);
+    mdl.set(MdlColumn.DECIMAL_DIGITS, decimalDigits);
     java.lang.String numPrecRadix = new java.lang.String("numPrecRadix");
-    mdl.setValueByKey(MdlColumn.NUM_PREC_RADIX, numPrecRadix);
+    mdl.set(MdlColumn.NUM_PREC_RADIX, numPrecRadix);
     java.lang.String nullable = new java.lang.String("nullable");
-    mdl.setValueByKey(MdlColumn.NULLABLE, nullable);
+    mdl.set(MdlColumn.NULLABLE, nullable);
     java.lang.String remarks = new java.lang.String("remarks");
-    mdl.setValueByKey(MdlColumn.REMARKS, remarks);
+    mdl.set(MdlColumn.REMARKS, remarks);
     java.lang.String columnDef = new java.lang.String("columnDef");
-    mdl.setValueByKey(MdlColumn.COLUMN_DEF, columnDef);
+    mdl.set(MdlColumn.COLUMN_DEF, columnDef);
     java.lang.String sqlDataType = new java.lang.String("sqlDataType");
-    mdl.setValueByKey(MdlColumn.SQL_DATA_TYPE, sqlDataType);
+    mdl.set(MdlColumn.SQL_DATA_TYPE, sqlDataType);
     java.lang.String sqlDatetimeSub = new java.lang.String("sqlDatetimeSub");
-    mdl.setValueByKey(MdlColumn.SQL_DATETIME_SUB, sqlDatetimeSub);
+    mdl.set(MdlColumn.SQL_DATETIME_SUB, sqlDatetimeSub);
     java.lang.String charOctetLength = new java.lang.String("charOctetLength");
-    mdl.setValueByKey(MdlColumn.CHAR_OCTET_LENGTH, charOctetLength);
+    mdl.set(MdlColumn.CHAR_OCTET_LENGTH, charOctetLength);
     java.lang.String ordinalPosition = new java.lang.String("ordinalPosition");
-    mdl.setValueByKey(MdlColumn.ORDINAL_POSITION, ordinalPosition);
+    mdl.set(MdlColumn.ORDINAL_POSITION, ordinalPosition);
     java.lang.String isNullable = new java.lang.String("isNullable");
-    mdl.setValueByKey(MdlColumn.IS_NULLABLE, isNullable);
+    mdl.set(MdlColumn.IS_NULLABLE, isNullable);
     java.lang.String scopeCatalog = new java.lang.String("scopeCatalog");
-    mdl.setValueByKey(MdlColumn.SCOPE_CATALOG, scopeCatalog);
+    mdl.set(MdlColumn.SCOPE_CATALOG, scopeCatalog);
     java.lang.String scopeSchema = new java.lang.String("scopeSchema");
-    mdl.setValueByKey(MdlColumn.SCOPE_SCHEMA, scopeSchema);
+    mdl.set(MdlColumn.SCOPE_SCHEMA, scopeSchema);
     java.lang.String scopeTable = new java.lang.String("scopeTable");
-    mdl.setValueByKey(MdlColumn.SCOPE_TABLE, scopeTable);
+    mdl.set(MdlColumn.SCOPE_TABLE, scopeTable);
     java.lang.String sourceDataType = new java.lang.String("sourceDataType");
-    mdl.setValueByKey(MdlColumn.SOURCE_DATA_TYPE, sourceDataType);
+    mdl.set(MdlColumn.SOURCE_DATA_TYPE, sourceDataType);
     java.lang.String isAutoincrement = new java.lang.String("isAutoincrement");
-    mdl.setValueByKey(MdlColumn.IS_AUTOINCREMENT, isAutoincrement);
+    mdl.set(MdlColumn.IS_AUTOINCREMENT, isAutoincrement);
     java.lang.String isGeneratedcolumn = new java.lang.String("isGeneratedcolumn");
-    mdl.setValueByKey(MdlColumn.IS_GENERATEDCOLUMN, isGeneratedcolumn);
+    mdl.set(MdlColumn.IS_GENERATEDCOLUMN, isGeneratedcolumn);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey( MdlColumn.TABLE_CAT ));
+        mdl.get( MdlColumn.TABLE_CAT ));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey( MdlColumn.TABLE_SCHEM ));
+        mdl.get( MdlColumn.TABLE_SCHEM ));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey( MdlColumn.TABLE_NAME ));
+        mdl.get( MdlColumn.TABLE_NAME ));
     Assert.assertEquals(mdl.getColumnName(),
-        mdl.getValueByKey( MdlColumn.COLUMN_NAME ));
+        mdl.get( MdlColumn.COLUMN_NAME ));
     Assert.assertEquals(mdl.getDataType(),
-        mdl.getValueByKey( MdlColumn.DATA_TYPE ));
+        mdl.get( MdlColumn.DATA_TYPE ));
     Assert.assertEquals(mdl.getTypeName(),
-        mdl.getValueByKey( MdlColumn.TYPE_NAME ));
+        mdl.get( MdlColumn.TYPE_NAME ));
     Assert.assertEquals(mdl.getTypeNameJava(),
-        mdl.getValueByKey( MdlColumn.TYPE_NAME_JAVA ));
+        mdl.get( MdlColumn.TYPE_NAME_JAVA ));
     Assert.assertEquals(mdl.getColumnSize(),
-        mdl.getValueByKey( MdlColumn.COLUMN_SIZE ));
+        mdl.get( MdlColumn.COLUMN_SIZE ));
     Assert.assertEquals(mdl.getBufferLength(),
-        mdl.getValueByKey( MdlColumn.BUFFER_LENGTH ));
+        mdl.get( MdlColumn.BUFFER_LENGTH ));
     Assert.assertEquals(mdl.getDecimalDigits(),
-        mdl.getValueByKey( MdlColumn.DECIMAL_DIGITS ));
+        mdl.get( MdlColumn.DECIMAL_DIGITS ));
     Assert.assertEquals(mdl.getNumPrecRadix(),
-        mdl.getValueByKey( MdlColumn.NUM_PREC_RADIX ));
+        mdl.get( MdlColumn.NUM_PREC_RADIX ));
     Assert.assertEquals(mdl.getNullable(),
-        mdl.getValueByKey( MdlColumn.NULLABLE ));
+        mdl.get( MdlColumn.NULLABLE ));
     Assert.assertEquals(mdl.getRemarks(),
-        mdl.getValueByKey( MdlColumn.REMARKS ));
+        mdl.get( MdlColumn.REMARKS ));
     Assert.assertEquals(mdl.getColumnDef(),
-        mdl.getValueByKey( MdlColumn.COLUMN_DEF ));
+        mdl.get( MdlColumn.COLUMN_DEF ));
     Assert.assertEquals(mdl.getSqlDataType(),
-        mdl.getValueByKey( MdlColumn.SQL_DATA_TYPE ));
+        mdl.get( MdlColumn.SQL_DATA_TYPE ));
     Assert.assertEquals(mdl.getSqlDatetimeSub(),
-        mdl.getValueByKey( MdlColumn.SQL_DATETIME_SUB ));
+        mdl.get( MdlColumn.SQL_DATETIME_SUB ));
     Assert.assertEquals(mdl.getCharOctetLength(),
-        mdl.getValueByKey( MdlColumn.CHAR_OCTET_LENGTH ));
+        mdl.get( MdlColumn.CHAR_OCTET_LENGTH ));
     Assert.assertEquals(mdl.getOrdinalPosition(),
-        mdl.getValueByKey( MdlColumn.ORDINAL_POSITION ));
+        mdl.get( MdlColumn.ORDINAL_POSITION ));
     Assert.assertEquals(mdl.getIsNullable(),
-        mdl.getValueByKey( MdlColumn.IS_NULLABLE ));
+        mdl.get( MdlColumn.IS_NULLABLE ));
     Assert.assertEquals(mdl.getScopeCatalog(),
-        mdl.getValueByKey( MdlColumn.SCOPE_CATALOG ));
+        mdl.get( MdlColumn.SCOPE_CATALOG ));
     Assert.assertEquals(mdl.getScopeSchema(),
-        mdl.getValueByKey( MdlColumn.SCOPE_SCHEMA ));
+        mdl.get( MdlColumn.SCOPE_SCHEMA ));
     Assert.assertEquals(mdl.getScopeTable(),
-        mdl.getValueByKey( MdlColumn.SCOPE_TABLE ));
+        mdl.get( MdlColumn.SCOPE_TABLE ));
     Assert.assertEquals(mdl.getSourceDataType(),
-        mdl.getValueByKey( MdlColumn.SOURCE_DATA_TYPE ));
+        mdl.get( MdlColumn.SOURCE_DATA_TYPE ));
     Assert.assertEquals(mdl.getIsAutoincrement(),
-        mdl.getValueByKey( MdlColumn.IS_AUTOINCREMENT ));
+        mdl.get( MdlColumn.IS_AUTOINCREMENT ));
     Assert.assertEquals(mdl.getIsGeneratedcolumn(),
-        mdl.getValueByKey( MdlColumn.IS_GENERATEDCOLUMN ));
-
+        mdl.get( MdlColumn.IS_GENERATEDCOLUMN ));
   }
 
   /**

@@ -1384,7 +1384,7 @@ public class MdlTblSqliteTest {
    * 通过键名获取值的测试方法.
    */
   @Test
-  public void testGetValueByKey() {
+  public void testGet() {
     MdlTblSqlite mdl = new MdlTblSqlite();
     java.lang.String testId = new java.lang.String("testId");
     mdl.setTestId(testId);
@@ -1422,116 +1422,116 @@ public class MdlTblSqliteTest {
     mdl.setUpdateScreenId(updateScreenId);
 
     Assert.assertEquals(mdl.getTestId(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_ID));
+        mdl.get(MdlTblSqlite.TEST_ID));
     Assert.assertEquals(mdl.getTestName(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_NAME));
+        mdl.get(MdlTblSqlite.TEST_NAME));
     Assert.assertEquals(mdl.getTestBlob(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_BLOB));
+        mdl.get(MdlTblSqlite.TEST_BLOB));
     Assert.assertEquals(mdl.getTestDouble(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_DOUBLE));
+        mdl.get(MdlTblSqlite.TEST_DOUBLE));
     Assert.assertEquals(mdl.getTestFloat(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_FLOAT));
+        mdl.get(MdlTblSqlite.TEST_FLOAT));
     Assert.assertEquals(mdl.getTestTinyint(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_TINYINT));
+        mdl.get(MdlTblSqlite.TEST_TINYINT));
     Assert.assertEquals(mdl.getTestInt(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_INT));
+        mdl.get(MdlTblSqlite.TEST_INT));
     Assert.assertEquals(mdl.getTestDecimal(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_DECIMAL));
+        mdl.get(MdlTblSqlite.TEST_DECIMAL));
     Assert.assertEquals(mdl.getTestBigint(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_BIGINT));
+        mdl.get(MdlTblSqlite.TEST_BIGINT));
     Assert.assertEquals(mdl.getTestDatetime(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_DATETIME));
+        mdl.get(MdlTblSqlite.TEST_DATETIME));
     Assert.assertEquals(mdl.getTestOrder(),
-        mdl.getValueByKey(MdlTblSqlite.TEST_ORDER));
+        mdl.get(MdlTblSqlite.TEST_ORDER));
     Assert.assertEquals(mdl.getCreateDate(),
-        mdl.getValueByKey(MdlTblSqlite.CREATE_DATE));
+        mdl.get(MdlTblSqlite.CREATE_DATE));
     Assert.assertEquals(mdl.getCreateTime(),
-        mdl.getValueByKey(MdlTblSqlite.CREATE_TIME));
+        mdl.get(MdlTblSqlite.CREATE_TIME));
     Assert.assertEquals(mdl.getUpdateDate(),
-        mdl.getValueByKey(MdlTblSqlite.UPDATE_DATE));
+        mdl.get(MdlTblSqlite.UPDATE_DATE));
     Assert.assertEquals(mdl.getUpdateTime(),
-        mdl.getValueByKey(MdlTblSqlite.UPDATE_TIME));
+        mdl.get(MdlTblSqlite.UPDATE_TIME));
     Assert.assertEquals(mdl.getUpdateUserId(),
-        mdl.getValueByKey(MdlTblSqlite.UPDATE_USER_ID));
+        mdl.get(MdlTblSqlite.UPDATE_USER_ID));
     Assert.assertEquals(mdl.getUpdateScreenId(),
-        mdl.getValueByKey(MdlTblSqlite.UPDATE_SCREEN_ID));
+        mdl.get(MdlTblSqlite.UPDATE_SCREEN_ID));
 
   }
   /**
    * 通过键名设置值的测试方法.
    */
   @Test
-  public void testSetValueByKey() {
+  public void testSet() {
     MdlTblSqlite mdl = new MdlTblSqlite();
     java.lang.String testId = new java.lang.String("testId");
-    mdl.setValueByKey(MdlTblSqlite.TEST_ID, testId);
+    mdl.set(MdlTblSqlite.TEST_ID, testId);
     java.lang.String testName = new java.lang.String("testName");
-    mdl.setValueByKey(MdlTblSqlite.TEST_NAME, testName);
+    mdl.set(MdlTblSqlite.TEST_NAME, testName);
     byte[] testBlob = new byte[] {0x32};
-    mdl.setValueByKey(MdlTblSqlite.TEST_BLOB, testBlob);
+    mdl.set(MdlTblSqlite.TEST_BLOB, testBlob);
     java.lang.Double testDouble = 12346.679d;
-    mdl.setValueByKey(MdlTblSqlite.TEST_DOUBLE, testDouble);
+    mdl.set(MdlTblSqlite.TEST_DOUBLE, testDouble);
     java.lang.Double testFloat = 12346.679d;
-    mdl.setValueByKey(MdlTblSqlite.TEST_FLOAT, testFloat);
+    mdl.set(MdlTblSqlite.TEST_FLOAT, testFloat);
     java.lang.Integer testTinyint = 54421;
-    mdl.setValueByKey(MdlTblSqlite.TEST_TINYINT, testTinyint);
+    mdl.set(MdlTblSqlite.TEST_TINYINT, testTinyint);
     java.lang.Long testInt = 654221L;
-    mdl.setValueByKey(MdlTblSqlite.TEST_INT, testInt);
+    mdl.set(MdlTblSqlite.TEST_INT, testInt);
     java.lang.Double testDecimal = 12346.679d;
-    mdl.setValueByKey(MdlTblSqlite.TEST_DECIMAL, testDecimal);
+    mdl.set(MdlTblSqlite.TEST_DECIMAL, testDecimal);
     java.lang.Long testBigint = 654221L;
-    mdl.setValueByKey(MdlTblSqlite.TEST_BIGINT, testBigint);
+    mdl.set(MdlTblSqlite.TEST_BIGINT, testBigint);
     java.lang.Long testDatetime = 654221L;
-    mdl.setValueByKey(MdlTblSqlite.TEST_DATETIME, testDatetime);
+    mdl.set(MdlTblSqlite.TEST_DATETIME, testDatetime);
     java.lang.String testOrder = new java.lang.String("testOrder");
-    mdl.setValueByKey(MdlTblSqlite.TEST_ORDER, testOrder);
+    mdl.set(MdlTblSqlite.TEST_ORDER, testOrder);
     java.lang.Long createDate = 654221L;
-    mdl.setValueByKey(MdlTblSqlite.CREATE_DATE, createDate);
+    mdl.set(MdlTblSqlite.CREATE_DATE, createDate);
     java.lang.Long createTime = 654221L;
-    mdl.setValueByKey(MdlTblSqlite.CREATE_TIME, createTime);
+    mdl.set(MdlTblSqlite.CREATE_TIME, createTime);
     java.lang.Long updateDate = 654221L;
-    mdl.setValueByKey(MdlTblSqlite.UPDATE_DATE, updateDate);
+    mdl.set(MdlTblSqlite.UPDATE_DATE, updateDate);
     java.lang.Long updateTime = 654221L;
-    mdl.setValueByKey(MdlTblSqlite.UPDATE_TIME, updateTime);
+    mdl.set(MdlTblSqlite.UPDATE_TIME, updateTime);
     java.lang.String updateUserId = new java.lang.String("updateUserId");
-    mdl.setValueByKey(MdlTblSqlite.UPDATE_USER_ID, updateUserId);
+    mdl.set(MdlTblSqlite.UPDATE_USER_ID, updateUserId);
     java.lang.String updateScreenId = new java.lang.String("updateScreenId");
-    mdl.setValueByKey(MdlTblSqlite.UPDATE_SCREEN_ID, updateScreenId);
+    mdl.set(MdlTblSqlite.UPDATE_SCREEN_ID, updateScreenId);
 
     Assert.assertEquals(mdl.getTestId(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_ID ));
+        mdl.get( MdlTblSqlite.TEST_ID ));
     Assert.assertEquals(mdl.getTestName(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_NAME ));
+        mdl.get( MdlTblSqlite.TEST_NAME ));
     Assert.assertEquals(mdl.getTestBlob(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_BLOB ));
+        mdl.get( MdlTblSqlite.TEST_BLOB ));
     Assert.assertEquals(mdl.getTestDouble(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_DOUBLE ));
+        mdl.get( MdlTblSqlite.TEST_DOUBLE ));
     Assert.assertEquals(mdl.getTestFloat(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_FLOAT ));
+        mdl.get( MdlTblSqlite.TEST_FLOAT ));
     Assert.assertEquals(mdl.getTestTinyint(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_TINYINT ));
+        mdl.get( MdlTblSqlite.TEST_TINYINT ));
     Assert.assertEquals(mdl.getTestInt(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_INT ));
+        mdl.get( MdlTblSqlite.TEST_INT ));
     Assert.assertEquals(mdl.getTestDecimal(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_DECIMAL ));
+        mdl.get( MdlTblSqlite.TEST_DECIMAL ));
     Assert.assertEquals(mdl.getTestBigint(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_BIGINT ));
+        mdl.get( MdlTblSqlite.TEST_BIGINT ));
     Assert.assertEquals(mdl.getTestDatetime(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_DATETIME ));
+        mdl.get( MdlTblSqlite.TEST_DATETIME ));
     Assert.assertEquals(mdl.getTestOrder(),
-        mdl.getValueByKey( MdlTblSqlite.TEST_ORDER ));
+        mdl.get( MdlTblSqlite.TEST_ORDER ));
     Assert.assertEquals(mdl.getCreateDate(),
-        mdl.getValueByKey( MdlTblSqlite.CREATE_DATE ));
+        mdl.get( MdlTblSqlite.CREATE_DATE ));
     Assert.assertEquals(mdl.getCreateTime(),
-        mdl.getValueByKey( MdlTblSqlite.CREATE_TIME ));
+        mdl.get( MdlTblSqlite.CREATE_TIME ));
     Assert.assertEquals(mdl.getUpdateDate(),
-        mdl.getValueByKey( MdlTblSqlite.UPDATE_DATE ));
+        mdl.get( MdlTblSqlite.UPDATE_DATE ));
     Assert.assertEquals(mdl.getUpdateTime(),
-        mdl.getValueByKey( MdlTblSqlite.UPDATE_TIME ));
+        mdl.get( MdlTblSqlite.UPDATE_TIME ));
     Assert.assertEquals(mdl.getUpdateUserId(),
-        mdl.getValueByKey( MdlTblSqlite.UPDATE_USER_ID ));
+        mdl.get( MdlTblSqlite.UPDATE_USER_ID ));
     Assert.assertEquals(mdl.getUpdateScreenId(),
-        mdl.getValueByKey( MdlTblSqlite.UPDATE_SCREEN_ID ));
+        mdl.get( MdlTblSqlite.UPDATE_SCREEN_ID ));
 
   }
 

@@ -204,7 +204,7 @@ public class MdlPrimaryKey implements Serializable, IKeyValue {
    * @return Object 对应键名值。
    */
   @Override
-  public Object getValueByKey(String key) {
+  public Object get(String key) {
     Object ret = null;
     if (MdlPrimaryKey.TABLE_CAT.equals(key)) {
       ret = this.getTableCat();
@@ -234,7 +234,7 @@ public class MdlPrimaryKey implements Serializable, IKeyValue {
    * @param value 对应键名值。
    */
   @Override
-  public void setValueByKey(String key, Object value) {
+  public IKeyValue set(String key, Object value) {
     if (MdlPrimaryKey.TABLE_CAT.equals(key)) {
       this.setTableCat((java.lang.String) value);
     }
@@ -253,5 +253,6 @@ public class MdlPrimaryKey implements Serializable, IKeyValue {
     if (MdlPrimaryKey.PK_NAME.equals(key)) {
       this.setPkName((java.lang.String) value);
     }
+    return this;
   }
 }

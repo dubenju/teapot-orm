@@ -405,7 +405,7 @@ public class MdlPrimaryKeyTest {
    * 通过键名获取值的测试方法.
    */
   @Test
-  public void testGetValueByKey() {
+  public void testGet() {
     MdlPrimaryKey mdl = new MdlPrimaryKey();
     java.lang.String tableCat = new java.lang.String("tableCat");
     mdl.setTableCat(tableCat);
@@ -421,50 +421,50 @@ public class MdlPrimaryKeyTest {
     mdl.setPkName(pkName);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey(MdlPrimaryKey.TABLE_CAT));
+        mdl.get(MdlPrimaryKey.TABLE_CAT));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey(MdlPrimaryKey.TABLE_SCHEM));
+        mdl.get(MdlPrimaryKey.TABLE_SCHEM));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey(MdlPrimaryKey.TABLE_NAME));
+        mdl.get(MdlPrimaryKey.TABLE_NAME));
     Assert.assertEquals(mdl.getColumnName(),
-        mdl.getValueByKey(MdlPrimaryKey.COLUMN_NAME));
+        mdl.get(MdlPrimaryKey.COLUMN_NAME));
     Assert.assertEquals(mdl.getKeySeq(),
-        mdl.getValueByKey(MdlPrimaryKey.KEY_SEQ));
+        mdl.get(MdlPrimaryKey.KEY_SEQ));
     Assert.assertEquals(mdl.getPkName(),
-        mdl.getValueByKey(MdlPrimaryKey.PK_NAME));
+        mdl.get(MdlPrimaryKey.PK_NAME));
 
   }
   /**
    * 通过键名设置值的测试方法.
    */
   @Test
-  public void testSetValueByKey() {
+  public void testSet() {
     MdlPrimaryKey mdl = new MdlPrimaryKey();
     java.lang.String tableCat = new java.lang.String("tableCat");
-    mdl.setValueByKey(MdlPrimaryKey.TABLE_CAT, tableCat);
+    mdl.set(MdlPrimaryKey.TABLE_CAT, tableCat);
     java.lang.String tableSchem = new java.lang.String("tableSchem");
-    mdl.setValueByKey(MdlPrimaryKey.TABLE_SCHEM, tableSchem);
+    mdl.set(MdlPrimaryKey.TABLE_SCHEM, tableSchem);
     java.lang.String tableName = new java.lang.String("tableName");
-    mdl.setValueByKey(MdlPrimaryKey.TABLE_NAME, tableName);
+    mdl.set(MdlPrimaryKey.TABLE_NAME, tableName);
     java.lang.String columnName = new java.lang.String("columnName");
-    mdl.setValueByKey(MdlPrimaryKey.COLUMN_NAME, columnName);
+    mdl.set(MdlPrimaryKey.COLUMN_NAME, columnName);
     java.lang.String keySeq = new java.lang.String("keySeq");
-    mdl.setValueByKey(MdlPrimaryKey.KEY_SEQ, keySeq);
+    mdl.set(MdlPrimaryKey.KEY_SEQ, keySeq);
     java.lang.String pkName = new java.lang.String("pkName");
-    mdl.setValueByKey(MdlPrimaryKey.PK_NAME, pkName);
+    mdl.set(MdlPrimaryKey.PK_NAME, pkName);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey( MdlPrimaryKey.TABLE_CAT ));
+        mdl.get( MdlPrimaryKey.TABLE_CAT ));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey( MdlPrimaryKey.TABLE_SCHEM ));
+        mdl.get( MdlPrimaryKey.TABLE_SCHEM ));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey( MdlPrimaryKey.TABLE_NAME ));
+        mdl.get( MdlPrimaryKey.TABLE_NAME ));
     Assert.assertEquals(mdl.getColumnName(),
-        mdl.getValueByKey( MdlPrimaryKey.COLUMN_NAME ));
+        mdl.get( MdlPrimaryKey.COLUMN_NAME ));
     Assert.assertEquals(mdl.getKeySeq(),
-        mdl.getValueByKey( MdlPrimaryKey.KEY_SEQ ));
+        mdl.get( MdlPrimaryKey.KEY_SEQ ));
     Assert.assertEquals(mdl.getPkName(),
-        mdl.getValueByKey( MdlPrimaryKey.PK_NAME ));
+        mdl.get( MdlPrimaryKey.PK_NAME ));
 
   }
 

@@ -972,7 +972,7 @@ public class MdlIndexTest {
    * 通过键名获取值的测试方法.
    */
   @Test
-  public void testGetValueByKey() {
+  public void testGet() {
     MdlIndex mdl = new MdlIndex();
     java.lang.String tableCat = new java.lang.String("tableCat");
     mdl.setTableCat(tableCat);
@@ -1002,92 +1002,92 @@ public class MdlIndexTest {
     mdl.setFilterCondition(filterCondition);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey(MdlIndex.TABLE_CAT));
+        mdl.get(MdlIndex.TABLE_CAT));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey(MdlIndex.TABLE_SCHEM));
+        mdl.get(MdlIndex.TABLE_SCHEM));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey(MdlIndex.TABLE_NAME));
+        mdl.get(MdlIndex.TABLE_NAME));
     Assert.assertEquals(mdl.getNonUnique(),
-        mdl.getValueByKey(MdlIndex.NON_UNIQUE));
+        mdl.get(MdlIndex.NON_UNIQUE));
     Assert.assertEquals(mdl.getIndexQualifier(),
-        mdl.getValueByKey(MdlIndex.INDEX_QUALIFIER));
+        mdl.get(MdlIndex.INDEX_QUALIFIER));
     Assert.assertEquals(mdl.getIndexName(),
-        mdl.getValueByKey(MdlIndex.INDEX_NAME));
+        mdl.get(MdlIndex.INDEX_NAME));
     Assert.assertEquals(mdl.getType(),
-        mdl.getValueByKey(MdlIndex.TYPE));
+        mdl.get(MdlIndex.TYPE));
     Assert.assertEquals(mdl.getOrdinalPosition(),
-        mdl.getValueByKey(MdlIndex.ORDINAL_POSITION));
+        mdl.get(MdlIndex.ORDINAL_POSITION));
     Assert.assertEquals(mdl.getColumnName(),
-        mdl.getValueByKey(MdlIndex.COLUMN_NAME));
+        mdl.get(MdlIndex.COLUMN_NAME));
     Assert.assertEquals(mdl.getAscOrDesc(),
-        mdl.getValueByKey(MdlIndex.ASC_OR_DESC));
+        mdl.get(MdlIndex.ASC_OR_DESC));
     Assert.assertEquals(mdl.getCardinality(),
-        mdl.getValueByKey(MdlIndex.CARDINALITY));
+        mdl.get(MdlIndex.CARDINALITY));
     Assert.assertEquals(mdl.getPages(),
-        mdl.getValueByKey(MdlIndex.PAGES));
+        mdl.get(MdlIndex.PAGES));
     Assert.assertEquals(mdl.getFilterCondition(),
-        mdl.getValueByKey(MdlIndex.FILTER_CONDITION));
+        mdl.get(MdlIndex.FILTER_CONDITION));
 
   }
   /**
    * 通过键名设置值的测试方法.
    */
   @Test
-  public void testSetValueByKey() {
+  public void testSet() {
     MdlIndex mdl = new MdlIndex();
     java.lang.String tableCat = new java.lang.String("tableCat");
-    mdl.setValueByKey(MdlIndex.TABLE_CAT, tableCat);
+    mdl.set(MdlIndex.TABLE_CAT, tableCat);
     java.lang.String tableSchem = new java.lang.String("tableSchem");
-    mdl.setValueByKey(MdlIndex.TABLE_SCHEM, tableSchem);
+    mdl.set(MdlIndex.TABLE_SCHEM, tableSchem);
     java.lang.String tableName = new java.lang.String("tableName");
-    mdl.setValueByKey(MdlIndex.TABLE_NAME, tableName);
+    mdl.set(MdlIndex.TABLE_NAME, tableName);
     java.lang.String nonUnique = new java.lang.String("nonUnique");
-    mdl.setValueByKey(MdlIndex.NON_UNIQUE, nonUnique);
+    mdl.set(MdlIndex.NON_UNIQUE, nonUnique);
     java.lang.String indexQualifier = new java.lang.String("indexQualifier");
-    mdl.setValueByKey(MdlIndex.INDEX_QUALIFIER, indexQualifier);
+    mdl.set(MdlIndex.INDEX_QUALIFIER, indexQualifier);
     java.lang.String indexName = new java.lang.String("indexName");
-    mdl.setValueByKey(MdlIndex.INDEX_NAME, indexName);
+    mdl.set(MdlIndex.INDEX_NAME, indexName);
     java.lang.String type = new java.lang.String("type");
-    mdl.setValueByKey(MdlIndex.TYPE, type);
+    mdl.set(MdlIndex.TYPE, type);
     java.lang.String ordinalPosition = new java.lang.String("ordinalPosition");
-    mdl.setValueByKey(MdlIndex.ORDINAL_POSITION, ordinalPosition);
+    mdl.set(MdlIndex.ORDINAL_POSITION, ordinalPosition);
     java.lang.String columnName = new java.lang.String("columnName");
-    mdl.setValueByKey(MdlIndex.COLUMN_NAME, columnName);
+    mdl.set(MdlIndex.COLUMN_NAME, columnName);
     java.lang.String ascOrDesc = new java.lang.String("ascOrDesc");
-    mdl.setValueByKey(MdlIndex.ASC_OR_DESC, ascOrDesc);
+    mdl.set(MdlIndex.ASC_OR_DESC, ascOrDesc);
     java.lang.String cardinality = new java.lang.String("cardinality");
-    mdl.setValueByKey(MdlIndex.CARDINALITY, cardinality);
+    mdl.set(MdlIndex.CARDINALITY, cardinality);
     java.lang.String pages = new java.lang.String("pages");
-    mdl.setValueByKey(MdlIndex.PAGES, pages);
+    mdl.set(MdlIndex.PAGES, pages);
     java.lang.String filterCondition = new java.lang.String("filterCondition");
-    mdl.setValueByKey(MdlIndex.FILTER_CONDITION, filterCondition);
+    mdl.set(MdlIndex.FILTER_CONDITION, filterCondition);
 
     Assert.assertEquals(mdl.getTableCat(),
-        mdl.getValueByKey( MdlIndex.TABLE_CAT ));
+        mdl.get( MdlIndex.TABLE_CAT ));
     Assert.assertEquals(mdl.getTableSchem(),
-        mdl.getValueByKey( MdlIndex.TABLE_SCHEM ));
+        mdl.get( MdlIndex.TABLE_SCHEM ));
     Assert.assertEquals(mdl.getTableName(),
-        mdl.getValueByKey( MdlIndex.TABLE_NAME ));
+        mdl.get( MdlIndex.TABLE_NAME ));
     Assert.assertEquals(mdl.getNonUnique(),
-        mdl.getValueByKey( MdlIndex.NON_UNIQUE ));
+        mdl.get( MdlIndex.NON_UNIQUE ));
     Assert.assertEquals(mdl.getIndexQualifier(),
-        mdl.getValueByKey( MdlIndex.INDEX_QUALIFIER ));
+        mdl.get( MdlIndex.INDEX_QUALIFIER ));
     Assert.assertEquals(mdl.getIndexName(),
-        mdl.getValueByKey( MdlIndex.INDEX_NAME ));
+        mdl.get( MdlIndex.INDEX_NAME ));
     Assert.assertEquals(mdl.getType(),
-        mdl.getValueByKey( MdlIndex.TYPE ));
+        mdl.get( MdlIndex.TYPE ));
     Assert.assertEquals(mdl.getOrdinalPosition(),
-        mdl.getValueByKey( MdlIndex.ORDINAL_POSITION ));
+        mdl.get( MdlIndex.ORDINAL_POSITION ));
     Assert.assertEquals(mdl.getColumnName(),
-        mdl.getValueByKey( MdlIndex.COLUMN_NAME ));
+        mdl.get( MdlIndex.COLUMN_NAME ));
     Assert.assertEquals(mdl.getAscOrDesc(),
-        mdl.getValueByKey( MdlIndex.ASC_OR_DESC ));
+        mdl.get( MdlIndex.ASC_OR_DESC ));
     Assert.assertEquals(mdl.getCardinality(),
-        mdl.getValueByKey( MdlIndex.CARDINALITY ));
+        mdl.get( MdlIndex.CARDINALITY ));
     Assert.assertEquals(mdl.getPages(),
-        mdl.getValueByKey( MdlIndex.PAGES ));
+        mdl.get( MdlIndex.PAGES ));
     Assert.assertEquals(mdl.getFilterCondition(),
-        mdl.getValueByKey( MdlIndex.FILTER_CONDITION ));
+        mdl.get( MdlIndex.FILTER_CONDITION ));
 
   }
 

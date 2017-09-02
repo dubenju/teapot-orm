@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="default">
+  <table name="tbl_test">
+    <column name="TEST_ID" required="true" size="3" type="VARCHAR"/>
+    <column name="TEST_NAME" required="true" size="60" type="VARCHAR"/>
+    <column name="TEST_BIT" required="false" size="1" type="BIT"/>
+    <column name="TEST_BLOB" required="false" size="65535" type="BLOB"/>
+    <column name="TEST_DOUBLE" required="false" size="22" type="DOUBLE"/>
+    <column name="TEST_FLOAT" required="false" size="12" type="FLOAT"/>
+    <column name="TEST_TINYINT" required="false" size="3" type="TINYINT"/>
+    <column name="TEST_INT" required="false" size="10" type="INT"/>
+    <column name="TEST_DECIMAL" required="false" size="10" type="DECIMAL"/>
+    <column name="TEST_BIGINT" required="false" size="19" type="BIGINT"/>
+    <column name="TEST_DATETIME" required="false" size="19" type="DATETIME"/>
+    <column name="TEST_ORDER" required="false" size="3" type="VARCHAR"/>
+    <column name="CREATE_DATE" required="true" size="10" type="DATE"/>
+    <column name="CREATE_TIME" required="true" size="8" type="TIME"/>
+    <column name="UPDATE_DATE" required="true" size="10" type="DATE"/>
+    <column name="UPDATE_TIME" required="true" size="8" type="TIME"/>
+    <column name="UPDATE_USER_ID" required="true" size="20" type="VARCHAR"/>
+    <column name="UPDATE_SCREEN_ID" required="true" size="20" type="VARCHAR"/>
+  </table>
+</database>

@@ -425,7 +425,7 @@ public class MdlTblSqlite implements Serializable, IKeyValue {
    * @return Object 对应键名值。
    */
   @Override
-  public Object getValueByKey(String key) {
+  public Object get(String key) {
     Object ret = null;
     if (MdlTblSqlite.TEST_ID.equals(key)) {
       ret = this.getTestId();
@@ -488,7 +488,7 @@ public class MdlTblSqlite implements Serializable, IKeyValue {
    * @param value 对应键名值。
    */
   @Override
-  public void setValueByKey(String key, Object value) {
+  public IKeyValue set(String key, Object value) {
     if (MdlTblSqlite.TEST_ID.equals(key)) {
       this.setTestId((java.lang.String) value);
     }
@@ -540,5 +540,6 @@ public class MdlTblSqlite implements Serializable, IKeyValue {
     if (MdlTblSqlite.UPDATE_SCREEN_ID.equals(key)) {
       this.setUpdateScreenId((java.lang.String) value);
     }
+    return this;
   }
 }

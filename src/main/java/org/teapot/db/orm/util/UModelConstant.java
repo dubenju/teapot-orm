@@ -19,11 +19,12 @@ package org.teapot.db.orm.util;
 /**
  * UModel类的常量接口。
  * @author dubenju@126.com
+ * @since 0.0.1
  *
  */
 public interface UModelConstant {
-  /** 排序：升序. */
+  /** 排序：升序.@since 0.0.1 */
   public static final int SORT_ASC = 1;
-  /** 排序：降序. */
+  /** 排序：降序.@since 0.0.1 */
   public static final int SORT_DSC = -1;
 }

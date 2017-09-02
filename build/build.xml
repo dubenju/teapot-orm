@@ -1,33 +1,36 @@
 <?xml version="1.0"?>
 <!-- Build file for applications -->
-<project name="TeapotORM" default="teapot-orm-compile" basedir=".">
+<project name="TeapotORM" default="auto" basedir=".">
+  <description>Teapot ORM</description>
+
+  <property file="build.properties"/>
+  <property name="build.properties" value="build.properties"/>
 
   <!-- Build classpath -->
   <path id="classpath">
     <fileset dir="../lib">
+      <include name="**/teapot-orm-${version}.jar"/>
       <include name="**/*.jar"/>
       <exclude name="**/junit-*.jar"/>
     </fileset>
   </path>
-
-  <property file="build.properties"/>
-  <property name="build.properties" value="build.properties"/>
 
   <!-- =================================================================== -->
   <!-- T E A P O T - O R M - C O M P I L E                                 -->
   <!-- =================================================================== -->
   <target name="teapot-orm-compile" description="--> compiles the source code">
 
-    <echo message="+------------------------------------------+"/>
-    <echo message="|                                          |"/>
-    <echo message="| compile the source code for Teapot ORM!  |"/>
-    <echo message="| ant teapot-orm-javadoc to generate apidoc|"/>
-    <echo message="| ant teapot-orm-jar to generate jar file  |"/>
+    <echo message="+--------------------------------------------------+"/>
+    <echo message="|                                                  |"/>
+    <echo message="| compile the source code for Teapot ORM!          |"/>
+    <echo message="| ant teapot-orm-javadoc to generate apidoc        |"/>
+    <echo message="| ant teapot-orm-jar to generate jar file          |"/>
     <echo message="| ant teapot-orm-javadoc-jar to generate jar file  |"/>
-    <echo message="| ant teapot-orm-source-jar to generate jar file  |"/>
-    <echo message="| ant clean to clean classes folder.       |"/>
-    <echo message="|                                          |"/>
-    <echo message="+------------------------------------------+"/>
+    <echo message="| ant teapot-orm-source-jar to generate jar file   |"/>
+    <echo message="| ant clean to clean classes folder.               |"/>
+    <echo message="| ant gen Generating                               |"/>
+    <echo message="|                                                  |"/>
+    <echo message="+--------------------------------------------------+"/>
 
     <javac srcdir="${src.dir}"
       destdir="${build.dest}"
@@ -36,7 +39,7 @@
       optimize="${optimize}"
       encoding="UTF-8"
       includeAntRuntime="false" >
-      <exclude name="com/**"/> 
+      <exclude name="com/**"/>
       <classpath refid="classpath"/>
     </javac>
   </target>
@@ -58,7 +61,7 @@
   <!-- T E A P O T - O R M - J A V A O D C - J A R                         -->
   <!-- =================================================================== -->
   <target name="teapot-orm-javadoc-jar" depends="teapot-orm-javadoc">
-    <jar jarfile="../lib/teapot-orm-0.0.1-javadoc.jar"
+    <jar jarfile="../lib/teapot-orm-${version}-javadoc.jar"
       basedir="${doc.dir}"
       includes="**"
     />
@@ -68,7 +71,7 @@
   <!-- T E A P O T - O R M - J A R                                         -->
   <!-- =================================================================== -->
   <target name="teapot-orm-jar" depends="teapot-orm-compile">
-    <jar jarfile="../lib/teapot-orm-0.0.1.jar"
+    <jar jarfile="../lib/teapot-orm-${version}.jar"
       basedir="${build.dest}"
       includes="**"
     />
@@ -78,7 +81,7 @@
   <!-- T E A P O T - O R M - J A R                                         -->
   <!-- =================================================================== -->
   <target name="teapot-orm-source-jar" depends="teapot-orm-compile">
-    <jar jarfile="../lib/teapot-orm-0.0.1-sources.jar"
+    <jar jarfile="../lib/teapot-orm-${version}-sources.jar"
       basedir="${src.dir}"
       includes="**"
     />
@@ -93,5 +96,33 @@
 
     <mkdir dir="${build.dest}"/>
     <mkdir dir="${doc.dir}"/>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- A U T O                                                             -->
+  <!-- =================================================================== -->
+  <target  name="auto" depends="teapot-orm-source-jar, teapot-orm-javadoc-jar, teapot-orm-jar"
+    description="==> compiles the classes">
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- G E N                                                               -->
+  <!-- =================================================================== -->
+  <target name="gen" description="==> generative source">
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="|   Generating ( Java Bean )               |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <java fork="true" failonerror="yes" classname="${class.name}" >
+      <sysproperty key="file.encoding" value="utf-8"/>
+      <arg line="../conf/Teapot_ORM.properties" />
+      <classpath>
+        <pathelement path="../lib/teapot-orm-${version}.jar"/>
+        <path refid="classpath"/>
+      </classpath>
+    </java>
+
   </target>
 </project>

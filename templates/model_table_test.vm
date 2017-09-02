@@ -147,7 +147,7 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}")Test {
     mdl = new Mdl$!fmtter.fmtFun("$!{table.TableName}")();
     stringBuffer = new StringBuffer();
 #foreach($col in $!{table.Colmuns})
-    stringBuffer.append("null#if(${velocityCount} < $!table.getColmuns().size()),#end");
+    stringBuffer.append("null#if($foreach.count < $!table.getColmuns().size()),#end");
 #end
     Assert.assertEquals(stringBuffer.toString(), mdl.toString());
 
@@ -187,14 +187,14 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}")Test {
 #else
     stringBuffer.append("null");
 #end
-#if(${velocityCount} < $!table.getColmuns().size())
+#if($foreach.count < $!table.getColmuns().size())
     stringBuffer.append(",");
 #end
 #end
     Assert.assertEquals(stringBuffer.toString(), mdl.toString());
 #end
-    Assert.assertEquals(#foreach($col in $!{table.Colmuns})#if(${velocityCount} > 1) + #{end}mdlAllCol.get$!fmtter.fmtFun("$!{col.ColumnName}")()
-        + "#if(${velocityCount} < $!table.getColmuns().size()),#end"#end, mdlAllCol.toString());
+    Assert.assertEquals(#foreach($col in $!{table.Colmuns})#if($foreach.count > 1) + #{end}mdlAllCol.get$!fmtter.fmtFun("$!{col.ColumnName}")()
+        + "#if($foreach.count < $!table.getColmuns().size()),#end"#end, mdlAllCol.toString());
   }
 
 
@@ -202,7 +202,7 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}")Test {
    * 通过键名获取值的测试方法.
    */
   @Test
-  public void testGetValueByKey() {
+  public void testGet() {
     Mdl$!fmtter.fmtFun("$!{table.TableName}") mdl = new Mdl$!fmtter.fmtFun("$!{table.TableName}")();
 #foreach($col in $!{table.Colmuns})
 #if(("$!{col.TypeNameJava}" == "java.lang.Boolean"))
@@ -232,7 +232,7 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}")Test {
 
 #foreach($col in $!{table.Colmuns})
     Assert.assertEquals(mdl.get$!fmtter.fmtFun("$!{col.ColumnName}")(),
-        mdl.getValueByKey(Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}));
+        mdl.get(Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}));
 #end
 
   }
@@ -240,7 +240,7 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}")Test {
    * 通过键名设置值的测试方法.
    */
   @Test
-  public void testSetValueByKey() {
+  public void testSet() {
     Mdl$!fmtter.fmtFun("$!{table.TableName}") mdl = new Mdl$!fmtter.fmtFun("$!{table.TableName}")();
 #foreach($col in $!{table.Colmuns})
 #if(("$!{col.TypeNameJava}" == "java.lang.Boolean"))
@@ -265,12 +265,12 @@ public class Mdl$!fmtter.fmtFun("$!{table.TableName}")Test {
 #else
     $!{col.TypeNameJava} $!fmtter.fmtVar("$!{col.ColumnName}") = new $!{col.TypeNameJava}();
 #end
-    mdl.setValueByKey(Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}, $!fmtter.fmtVar("$!{col.ColumnName}"));
+    mdl.set(Mdl$!fmtter.fmtFun("$!{table.TableName}").$!{col.ColumnName}, $!fmtter.fmtVar("$!{col.ColumnName}"));
 #end
 
 #foreach($col in $!{table.Colmuns})
     Assert.assertEquals(mdl.get$!{fmtter.fmtFun("$!{col.ColumnName}")}(),
-        mdl.getValueByKey( Mdl$!{fmtter.fmtFun("$!{table.TableName}")}.$!{col.ColumnName} ));
+        mdl.get( Mdl$!{fmtter.fmtFun("$!{table.TableName}")}.$!{col.ColumnName} ));
 #end
 
   }
